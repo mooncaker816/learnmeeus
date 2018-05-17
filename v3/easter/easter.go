@@ -5,6 +5,7 @@
 package easter
 
 // Gregorian returns month and day of Easter in the Gregorian calendar.
+// 格里历复活节日算法
 func Gregorian(y int) (m, d int) {
 	a := y % 19
 	b, c := y/100, y%100
@@ -21,6 +22,7 @@ func Gregorian(y int) (m, d int) {
 }
 
 // Julian returns month and day of Easter in the Julian calendar.
+// 儒略历复活节日算法
 func Julian(y int) (m, d int) {
 	a := y % 4
 	b := y % 7
