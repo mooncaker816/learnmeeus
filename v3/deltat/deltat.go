@@ -27,6 +27,7 @@ import (
 )
 
 // Table10A encodes ΔT for the range of years tableYear1 to tableYearN.
+// 1620-2010 ΔT数据表，用于插值计算
 var (
 	tableYear1 = 1620.
 	tableYearN = 2010.
@@ -58,32 +59,38 @@ var (
 )
 
 // Interp10A returns ΔT at a date, accurate from years 1620 to 2010.
+// 根据上述观测数据，对于1620年至2010年之间的ΔT进行插值计算
 func Interp10A(jde float64) (ΔT unit.Time) {
 	// kind of crazy, working in calendar years, but it seems that's what
 	// we're supposed to do.
-	y, m, d := julian.JDToCalendar(jde)
-	l := julian.LeapYearGregorian(y)
+	y, m, d := julian.JDToCalendar(jde) //首先获得年月日
+	l := julian.LeapYearGregorian(y)    //判断闰年，获得当年的总天数
 	yl := 365.
 	if l {
 		yl++
 	}
+	//转化JDE对应的时间点以年为单位（因为插值表中数据是年为单位），如1900.xxxx
 	yf := float64(y) + float64(julian.DayOfYear(y, m, int(d+.5), l))/yl
+	//自动获取最适合的三点插值对象
 	d3, err := interp.Len3ForInterpolateX(yf, tableYear1, tableYearN, table10A)
 	if err != nil {
 		panic(err) // error would indicate a bug in interp.Slice.
 	}
+	//插值计算获得对应的ΔT
 	return unit.Time(d3.InterpolateX(yf))
 }
 
 // c2000 returns centuries from calendar year 2000.0.
 //
 // Arg should be a calendar year.
+// 计算年份y距离2000年的世纪数
 func c2000(y float64) float64 {
 	return (y - 2000) * .01
 }
 
 // PolyBefore948 returns a polynomial approximation of ΔT valid for calendar
 // years before 948.
+// +948年之前的ΔT推算公式
 func PolyBefore948(year float64) (ΔT unit.Time) {
 	// (10.1) p. 78
 	return unit.Time(base.Horner(c2000(year), 2177, 497, 44.1))
@@ -91,6 +98,7 @@ func PolyBefore948(year float64) (ΔT unit.Time) {
 
 // Poly948to1600 returns a polynomial approximation of ΔT valid for calendar
 // years 948 to 1600.
+// +984年至1600年的ΔT推算公式
 func Poly948to1600(year float64) (ΔT unit.Time) {
 	// (10.2) p. 78
 	return unit.Time(base.Horner(c2000(year), 102, 102, 25.3))
@@ -98,6 +106,7 @@ func Poly948to1600(year float64) (ΔT unit.Time) {
 
 // PolyAfter2000 returns a polynomial approximation of ΔT valid for calendar
 // years after 2000.
+// 2000年以后的ΔT推算公式
 func PolyAfter2000(year float64) (ΔT unit.Time) {
 	ΔT = Poly948to1600(year)
 	if year < 2100 {
@@ -109,6 +118,7 @@ func PolyAfter2000(year float64) (ΔT unit.Time) {
 // jc1900 returns julian centuries from the epoch J1900.0
 //
 // Arg should be a julian day, technically JDE.
+// 计算儒略日jde距离J1900.0的世纪数
 func jc1900(jde float64) float64 {
 	return (jde - base.J1900) / base.JulianCentury
 }
@@ -117,6 +127,7 @@ func jc1900(jde float64) float64 {
 // 1800 to 1997.
 //
 // The accuracy is within 2.3 seconds.
+// 1800至1997ΔT经验公式，最大误差2.3秒
 func Poly1800to1997(jde float64) (ΔT unit.Time) {
 	return unit.Time(base.Horner(jc1900(jde),
 		-1.02, 91.02, 265.90, -839.16, -1545.20,
@@ -128,6 +139,7 @@ func Poly1800to1997(jde float64) (ΔT unit.Time) {
 // 1800 to 1899.
 //
 // The accuracy is within 0.9 seconds.
+// 1800至1899ΔT经验公式，最大误差0.9秒
 func Poly1800to1899(jde float64) (ΔT unit.Time) {
 	return unit.Time(base.Horner(jc1900(jde),
 		-2.50, 228.95, 5218.61, 56282.84, 324011.78,
@@ -139,6 +151,7 @@ func Poly1800to1899(jde float64) (ΔT unit.Time) {
 // 1900 to 1997.
 //
 // The accuracy is within 0.9 seconds.
+// 1900至1997ΔT经验公式，最大误差0.9秒
 func Poly1900to1997(jde float64) (ΔT unit.Time) {
 	return unit.Time(base.Horner(jc1900(jde),
 		-2.44, 87.24, 815.20, -2637.80, -18756.33,
