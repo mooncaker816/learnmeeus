@@ -16,9 +16,10 @@ import (
 // Ellipsoid represents an ellipsoid of revolution.
 //
 // Typical unit for Er is Km.
+// 地球椭球体
 type Ellipsoid struct {
-	Er float64 // equatorial radius
-	Fl float64 // flattening
+	Er float64 // equatorial radius 赤道半径
+	Fl float64 // flattening 地球扁率
 }
 
 // IAU 1976 values.  Radius in Km.
@@ -27,6 +28,7 @@ var Earth76 = Ellipsoid{Er: 6378.14, Fl: 1 / 298.257}
 // A returns equatorial radius in units of e.Er.
 //
 // A is a common identifier for equatorial radius.
+// 子午圈椭圆长半轴（赤道半径）
 func (e Ellipsoid) A() float64 {
 	return e.Er
 }
@@ -34,11 +36,14 @@ func (e Ellipsoid) A() float64 {
 // B returns polar radius in units of e.ER.
 //
 // B is a common identifier for polar radius.
+//
+// 子午圈椭圆短半轴（地心到极点的距离）
 func (e Ellipsoid) B() float64 {
 	return e.Er * (1 - e.Fl)
 }
 
 // Eccentricity of a meridian.
+// 子午圈椭圆离心率
 func (e Ellipsoid) Eccentricity() float64 {
 	return math.Sqrt((2 - e.Fl) * e.Fl)
 }
@@ -47,6 +52,7 @@ func (e Ellipsoid) Eccentricity() float64 {
 //
 // Arguments are geographic latitude φ and height h above the ellipsoid.
 // For e.Er in Km, h must be in meters.
+// 海拔为h的观察点对应的ρ sin φ′，ρ cos φ′
 func (e Ellipsoid) ParallaxConstants(φ unit.Angle, h float64) (s, c float64) {
 	boa := 1 - e.Fl
 	su, cu := math.Sincos(math.Atan(boa * φ.Tan()))
@@ -58,6 +64,7 @@ func (e Ellipsoid) ParallaxConstants(φ unit.Angle, h float64) (s, c float64) {
 // Rho is distance from Earth center to a point on the ellipsoid at latitude φ.
 //
 // Result unit is fraction of the equatorial radius.
+// 海平面上，ρ值计算
 func Rho(φ unit.Angle) float64 {
 	// Magic numbers...
 	return .9983271 + .0016764*φ.Mul(2).Cos() - .0000035*φ.Mul(4).Cos()
@@ -67,6 +74,7 @@ func Rho(φ unit.Angle) float64 {
 // latitude φ.
 //
 // Result unit is same as e.Er (typically Km.)
+// 同纬度圆半径
 func (e Ellipsoid) RadiusAtLatitude(φ unit.Angle) float64 {
 	s, c := φ.Sincos()
 	return e.A() * c / math.Sqrt(1-(2-e.Fl)*e.Fl*s*s)
@@ -78,6 +86,7 @@ func (e Ellipsoid) RadiusAtLatitude(φ unit.Angle) float64 {
 // (as returned by Ellipsoid.RadiusAtLatitude.)
 //
 // Result is distance along one degree of the circle, in same units as rp.
+// 同纬度，计算经度变化1度时长度变化的值
 func OneDegreeOfLongitude(rp float64) float64 {
 	return rp * math.Pi / 180
 }
@@ -91,6 +100,7 @@ const RotationRate1996_5 = 7.292114992e-5
 // RadiusOfCurvature of meridian at latitude φ.
 //
 // Result in units of e.ER, typically Km.
+// 纬度为φ，子午圈曲率半径
 func (e Ellipsoid) RadiusOfCurvature(φ unit.Angle) float64 {
 	s := φ.Sin()
 	e2 := (2 - e.Fl) * e.Fl
@@ -102,6 +112,7 @@ func (e Ellipsoid) RadiusOfCurvature(φ unit.Angle) float64 {
 // Argument rm is the radius of curvature along a meridian.
 // (as returned by Ellipsoid.RadiusOfCurvature.)
 // Result is distance in units of rm along one degree of the meridian.
+// 同经度，计算纬度变化1度时长度变化的值
 func OneDegreeOfLatitude(rm float64) float64 {
 	return rm * math.Pi / 180
 }
@@ -147,6 +158,7 @@ func ApproxLinearDistance(d unit.Angle) float64 {
 // ApproxLinearDistance.
 //
 // Result unit is units of e.Er, typically Km.
+// 地表两点距离
 func (e Ellipsoid) Distance(c1, c2 Coord) float64 {
 	// From AA, ch 11, p 84.
 	s2f, c2f := sincos2((c1.Lat + c2.Lat) / 2)
