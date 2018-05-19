@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mooncaker816/learnmeeus/v3/sidereal"
 	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/sidereal"
 	"github.com/soniakeys/sexagesimal"
 )
 
