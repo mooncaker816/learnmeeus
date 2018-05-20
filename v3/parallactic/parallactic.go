@@ -12,9 +12,10 @@ import (
 
 // ParallacticAngle returns parallactic angle of a celestial object.
 //
-//	φ is geographic latitude of observer.
-//	δ is declination of observed object.
-//	H is hour angle of observed object.
+//	φ is geographic latitude of observer.观测点地理纬度
+//	δ is declination of observed object.天体赤纬
+//	H is hour angle of observed object.天体赤经（时角）
+//  计算天体的Parallactic Angle
 func ParallacticAngle(φ, δ unit.Angle, H unit.HourAngle) unit.Angle {
 	sδ, cδ := δ.Sincos()
 	sH, cH := H.Sincos()
@@ -25,6 +26,7 @@ func ParallacticAngle(φ, δ unit.Angle, H unit.HourAngle) unit.Angle {
 // ParallacticAngleOnHorizon is a special case of ParallacticAngle.
 //
 // The hour angle is not needed as an input and the math inside simplifies.
+// 当天体位于地平线上时，计算Parallactic Angle，与时角无关
 func ParallacticAngleOnHorizon(φ, δ unit.Angle) unit.Angle {
 	return unit.Angle(math.Acos(φ.Sin() / δ.Cos()))
 }
