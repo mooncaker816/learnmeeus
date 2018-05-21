@@ -25,6 +25,7 @@ import (
 //
 // The algorithm is numerically naïve, and while patched up a bit for
 // small separations, remains unstable for separations near π.
+// 计算两天体之间的角距，r为赤经，d为赤纬
 func Sep(r1, d1, r2, d2 unit.Angle) unit.Angle {
 	sd1, cd1 := d1.Sincos()
 	sd2, cd2 := d2.Sincos()
@@ -33,7 +34,8 @@ func Sep(r1, d1, r2, d2 unit.Angle) unit.Angle {
 		return unit.Angle(math.Acos(cd))
 	}
 	// (17.2) p. 109
-	return unit.Angle(math.Hypot((r2-r1).Rad()*cd1, (d2 - d1).Rad()))
+	dm := (d1 + d2) / 2
+	return unit.Angle(math.Hypot((r2-r1).Rad()*dm.Cos(), (d2 - d1).Rad()))
 }
 
 // MinSep returns the minimum separation between two moving objects.
@@ -46,6 +48,10 @@ func Sep(r1, d1, r2, d2 unit.Angle) unit.Angle {
 // Result is obtained by computing separation at each of the three times
 // and interpolating a minimum.  This may be invalid for sufficiently close
 // approaches.
+//
+// 计算两个天体之间的最小角距
+// 此方法是将数据点计算成角距，然后直接对角距3点插值，求取最小值，
+// 当两个天体十分接近时，这个结果是不准确的，要使用方法MinSepRect
 func MinSep(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, error) {
 	if len(r1) != 3 || len(d1) != 3 || len(r2) != 3 || len(d2) != 3 {
 		return 0, interp.ErrorNot3
@@ -66,6 +72,8 @@ func MinSep(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, error) {
 //
 // Like MinSep, but using a method of rectangular coordinates that gives
 // accurate results even for close approaches.
+// 计算两个天体之间的最小角距
+// 此方法是引入直角坐标 u,v,先将数据点转换成u,v 表达，然后对u,v插值，求取最小值，
 func MinSepRect(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, error) {
 	if len(r1) != 3 || len(d1) != 3 || len(r2) != 3 || len(d2) != 3 {
 		return 0, interp.ErrorNot3
@@ -121,6 +129,7 @@ func MinSepRect(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, erro
 //
 // The algorithm uses the haversine function and is superior to the naïve
 // algorithm of the Sep function.
+// 利用半正矢的特点提高当角距很小时的精确程度
 func SepHav(r1, d1, r2, d2 unit.Angle) unit.Angle {
 	// using (17.5) p. 115
 	return unit.Angle(2 * math.Asin(math.Sqrt(base.Hav(d2-d1)+
@@ -130,6 +139,9 @@ func SepHav(r1, d1, r2, d2 unit.Angle) unit.Angle {
 // SepPauwels returns the angular separation between two celestial bodies.
 //
 // The algorithm is a numerically stable form of that used in Sep.
+// 当z小于0时，返回值应该在90-180度之间
+// 该方法与直接余弦定理求角距在数学上是等价的，
+// 但是对于计算机来说，arctan 比 arcsin能获得更高的精度
 func SepPauwels(r1, d1, r2, d2 unit.Angle) unit.Angle {
 	sd1, cd1 := d1.Sincos()
 	sd2, cd2 := d2.Sincos()
@@ -144,8 +156,10 @@ func SepPauwels(r1, d1, r2, d2 unit.Angle) unit.Angle {
 // another.
 //
 // The position angle result is measured counter-clockwise from North.
+// 1相对2的角距，从2的正北到1的角度
+// https://en.wikipedia.org/wiki/Position_angle
 func RelativePosition(r1, d1, r2, d2 unit.Angle) unit.Angle {
-	sΔr, cΔr := (r2 - r1).Sincos()
+	sΔr, cΔr := (r1 - r2).Sincos()
 	sd2, cd2 := d2.Sincos()
 	return unit.Angle(math.Atan2(sΔr, cd2*d1.Tan()-sd2*cΔr))
 }
