@@ -27,6 +27,7 @@ var (
 //
 // Result is refraction to be subtracted from h0 to obtain the true altitude
 // of the body.
+// 纬度大于15度时，由视纬度求真纬度的矫正量R
 func Gt15True(h0 unit.Angle) unit.Angle {
 	// (16.1) p. 105
 	t := (math.Pi/2 - h0).Tan()
@@ -40,6 +41,7 @@ func Gt15True(h0 unit.Angle) unit.Angle {
 //
 // Result is refraction to be added to h to obtain the apparent altitude
 // of the body.
+// 纬度大于15度时，由真纬度求视纬度的矫正量R
 func Gt15Apparent(h unit.Angle) unit.Angle {
 	// (16.2) p. 105
 	t := (math.Pi/2 - h).Tan()
@@ -54,6 +56,7 @@ func Gt15Apparent(h unit.Angle) unit.Angle {
 //
 // Result is refraction to be subtracted from h0 to obtain the true altitude
 // of the body.
+// Bennett 公式，由视纬度求真纬度矫正量 R
 func Bennett(h0 unit.Angle) unit.Angle {
 	// (16.3) p. 106
 	hd := h0.Deg()
@@ -66,6 +69,7 @@ func Bennett(h0 unit.Angle) unit.Angle {
 // result.
 //
 // Results are accurate to .015 arc min.  Result unit is radians.
+// 带矫正量的Bennett公式
 func Bennett2(h0 unit.Angle) unit.Angle {
 	R := Bennett(h0).Min()
 	return unit.AngleFromMin(R - .06*math.Sin((14.7*R+13)*math.Pi/180))
@@ -79,6 +83,7 @@ func Bennett2(h0 unit.Angle) unit.Angle {
 // of the body.
 //
 // Results are consistent with Bennett to within 4 arc sec.
+// 由真纬度求视纬度矫正量，与Bennett公式对应
 func Saemundsson(h unit.Angle) unit.Angle {
 	// (16.4) p. 106
 	hd := h.Deg()
