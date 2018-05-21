@@ -56,15 +56,16 @@ var ErrorCircumpolar = errors.New("Circumpolar")
 // The function argurments do not actually include the day, but do include
 // values computed from the day.
 //
-//	p is geographic coordinates of observer.
-//	h0 is "standard altitude" of the body.
-//	Th0 is apparent sidereal time at 0h UT at Greenwich.
-//	α, δ are right ascension and declination of the body.
+//	p is geographic coordinates of observer. p 为地平坐标（仰角，方位角）
+//	h0 is "standard altitude" of the body. h0 为天体升，降时实际地平线纬度
+//	Th0 is apparent sidereal time at 0h UT at Greenwich. Th0 为格林威治0h UT视恒星时
+//	α, δ are right ascension and declination of the body. α, δ为天体0h DT视赤经，视赤纬
 //
 // Th0 must be the time on the day of interest.
 // See sidereal.Apparent0UT.
 //
 // α, δ must be values at 0h dynamical time for the day of interest.
+// 近似计算升，中天，降时间
 func ApproxTimes(p globe.Coord, h0 unit.Angle, Th0 unit.Time, α unit.RA, δ unit.Angle) (tRise, tTransit, tSet unit.Time, err error) {
 	// approximate local hour angle
 	sLat, cLat := p.Lat.Sincos()
@@ -106,6 +107,7 @@ func ApproxTimes(p globe.Coord, h0 unit.Angle, Th0 unit.Time, α unit.RA, δ uni
 // and the day after the day of interest.  Units are radians.
 //
 // Result units are seconds of day and are in the range [0,86400).
+// 对近似计算结果迭代，得到精确升，中天，降时间
 func Times(p globe.Coord, ΔT unit.Time, h0 unit.Angle, Th0 unit.Time, α3 []unit.RA, δ3 []unit.Angle) (tRise, tTransit, tSet unit.Time, err error) {
 	tRise, tTransit, tSet, err = ApproxTimes(p, h0, Th0, α3[1], δ3[1])
 	if err != nil {
