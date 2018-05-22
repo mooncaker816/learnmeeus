@@ -27,6 +27,7 @@ import (
 // Return value t is time of conjunction in the scale of t1, t5.
 // Δd is the amount that object 2 was "above" object 1 at the time of
 // conjunction.
+// 计算两个移动的天体赤经（黄经）相同的时间点 t 和该时刻的赤纬（黄纬）差
 func Planetary(t1, t5 float64, r1, d1, r2, d2 []unit.Angle) (t float64, Δd unit.Angle, err error) {
 	if len(r1) != 5 || len(d1) != 5 || len(r2) != 5 || len(d2) != 5 {
 		err = errors.New("Five rows required in ephemerides")
@@ -45,6 +46,7 @@ func Planetary(t1, t5 float64, r1, d1, r2, d2 []unit.Angle) (t float64, Δd unit
 //
 // Arguments and return values same as with Planetary, except the non-moving
 // object is r1, d1.  The ephemeris of the moving object is r2, d2.
+// 计算一个移动的天体和一个在观测时间范围内默认为不动的天体（如恒星）赤经（黄经）相同的时间点 t 和该时刻的赤纬（黄纬）差
 func Stellar(t1, t5 float64, r1, d1 unit.Angle, r2, d2 []unit.Angle) (t float64, Δd unit.Angle, err error) {
 	if len(r2) != 5 || len(d2) != 5 {
 		err = errors.New("Five rows required in ephemeris")
@@ -64,12 +66,12 @@ func conj(t1, t5 float64, dr, dd []float64) (t float64, Δd unit.Angle, err erro
 	if l5, err = interp.NewLen5(t1, t5, dr); err != nil {
 		return
 	}
-	if t, err = l5.Zero(true); err != nil {
+	if t, err = l5.Zero(true); err != nil { // 计算经度重合时的时间点 t
 		return
 	}
 	if l5, err = interp.NewLen5(t1, t5, dd); err != nil {
 		return
 	}
-	ΔdRad, err := l5.InterpolateXStrict(t)
+	ΔdRad, err := l5.InterpolateXStrict(t) // 插值计算经度重合时的纬度差
 	return t, unit.Angle(ΔdRad), err
 }
