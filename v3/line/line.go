@@ -21,6 +21,7 @@ import (
 // is arbitrary.
 //
 // Result is time of alignment.
+// 计算一个运动的天体和另外两个在观测时间内默认为不动的天体在一条直线上的时间点
 func Time(r1, d1, r2, d2 unit.Angle, r3, d3 []unit.Angle, t1, t5 float64) (float64, error) {
 	if len(r3) != 5 || len(d3) != 5 {
 		return 0, errors.New("r3, d3 must be length 5")
@@ -46,6 +47,7 @@ func Time(r1, d1, r2, d2 unit.Angle, r3, d3 []unit.Angle, t1, t5 float64) (float
 // another, the result is the angle between the two lines.
 //
 // Algorithm by Meeus.
+// 计算第一点第二点经过的大圆和第二点第三点经过的大圆之间的角度
 func Angle(r1, d1, r2, d2, r3, d3 unit.Angle) unit.Angle {
 	sd2, cd2 := d2.Sincos()
 	sr21, cr21 := (r2 - r1).Sincos()
@@ -61,6 +63,7 @@ func Angle(r1, d1, r2, d2, r3, d3 unit.Angle) unit.Angle {
 // between that line and r0, d0.
 //
 // Algorithm by Meeus.
+// 计算一点到由另外两点组成的大圆之间的角距离
 func Error(r1, d1, r2, d2, r0, d0 unit.Angle) unit.Angle {
 	sr1, cr1 := r1.Sincos()
 	sd1, cd1 := d1.Sincos()
@@ -85,6 +88,8 @@ func Error(r1, d1, r2, d2, r0, d0 unit.Angle) unit.Angle {
 // as in the function Error.
 //
 // The algorithm is by B. Pessens.
+// Angle和 Error 的合体版
+// Angle 的值可能和之前 Angle 中计算的值互余180°（想象一下两个面的夹角）
 func AngleError(r1, d1, r2, d2, r3, d3 unit.Angle) (ψ, ω unit.Angle) {
 	sr1, cr1 := r1.Sincos()
 	sd1, cd1 := d1.Sincos()
