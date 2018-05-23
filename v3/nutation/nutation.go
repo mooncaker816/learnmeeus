@@ -17,6 +17,7 @@ import (
 // JDE = UT + ΔT, see package deltat.
 //
 // Computation is by 1980 IAU theory, with terms < .0003″ neglected.
+// 计算 jde 对应的章动
 func Nutation(jde float64) (Δψ, Δε unit.Angle) {
 	T := base.J2000Century(jde)
 	D := base.Horner(T,
@@ -24,7 +25,7 @@ func Nutation(jde float64) (Δψ, Δε unit.Angle) {
 	M := base.Horner(T,
 		357.52772, 35999.050340, -0.0001603, -1./300000) * math.Pi / 180
 	N := base.Horner(T,
-		134.96298, 477198.867398, 0.0086972, 1./5620) * math.Pi / 180
+		134.96298, 477198.867398, 0.0086972, 1./56250) * math.Pi / 180
 	F := base.Horner(T,
 		93.27191, 483202.017538, -0.0036825, 1./327270) * math.Pi / 180
 	Ω := base.Horner(T,
@@ -47,6 +48,7 @@ func Nutation(jde float64) (Δψ, Δε unit.Angle) {
 // and nutation in obliquity (Δε) for a given JDE.
 //
 // Accuracy is 0.5″ in Δψ, 0.1″ in Δε.
+// 精度要求为0.5″ in Δψ, 0.1″ in Δε
 func ApproxNutation(jde float64) (Δψ, Δε unit.Angle) {
 	T := (jde - base.J2000) / 36525
 	Ω := (125.04452 - 1934.136261*T) * math.Pi / 180
@@ -66,6 +68,7 @@ func ApproxNutation(jde float64) (Δψ, Δε unit.Angle) {
 //
 // Accuracy is 1″ over the range 1000 to 3000 years and 10″ over the range
 // 0 to 4000 years.
+// 平黄赤交角 - 精度一般，2000年误差 1"，4000年误差为 10"
 func MeanObliquity(jde float64) unit.Angle {
 	// (22.2) p. 147
 	return unit.AngleFromSec(base.Horner(base.J2000Century(jde),
@@ -82,6 +85,8 @@ func MeanObliquity(jde float64) unit.Angle {
 //
 // Accuracy over the valid date range of -8000 to +12000 years is
 // "a few seconds."
+// 平黄赤交角 - 精度较好，1000年后误差0".01(公元 1000 到 3000)，10000年后误差数个角秒
+// 适用范围：J2000.0 起算前后各10000年的范围内。
 func MeanObliquityLaskar(jde float64) unit.Angle {
 	// (22.3) p. 147
 	return unit.AngleFromSec(base.Horner(base.J2000Century(jde)*.01,
