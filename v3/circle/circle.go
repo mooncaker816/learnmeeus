@@ -19,6 +19,7 @@ import (
 //
 //	type I   Two points on circle, one interior.
 //	type II  All three points on circle.
+// 根据三点坐标，求最小圆直径
 func Smallest(r1, d1, r2, d2, r3, d3 unit.Angle) (Δ unit.Angle, typeI bool) {
 	// Using haversine formula, but reimplementing SepHav here to reuse
 	// the computed cosines.
