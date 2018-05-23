@@ -54,6 +54,7 @@ import (
 //
 // The two epochs should be within a few hundred years.
 // The declinations should not be too close to the poles.
+// 近似计算截至历元相对于起始历元的年度平均岁差，俩历元不能相差太远，且天体不能靠近天极
 func ApproxAnnualPrecession(eq *coord.Equatorial, epochFrom, epochTo float64) (Δα unit.HourAngle, Δδ unit.Angle) {
 	m, nα, nδ := mn(epochFrom, epochTo)
 	sα, cα := eq.RA.Sincos()
@@ -64,6 +65,7 @@ func ApproxAnnualPrecession(eq *coord.Equatorial, epochFrom, epochTo float64) (�
 }
 
 // mn as separate function for testing purposes
+// 计算截至历元相对于起始历元的平均年度岁差要用的变量 m,n
 func mn(epochFrom, epochTo float64) (m, nα unit.HourAngle, nδ unit.Angle) {
 	T := (epochTo - epochFrom) * .01
 	m = unit.HourAngleFromSec(3.07496 + 0.00186*T)
@@ -77,6 +79,7 @@ func mn(epochFrom, epochTo float64) (m, nα unit.HourAngle, nδ unit.Angle) {
 //
 // Both eqFrom and eqTo must be non-nil, although they may point to the same
 // struct.  EqTo is returned for convenience.
+// 两历元之间坐标的换算，考虑岁差和自行运动（mα，mδ）
 func ApproxPosition(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, mα unit.HourAngle, mδ unit.Angle) *coord.Equatorial {
 	Δα, Δδ := ApproxAnnualPrecession(eqFrom, epochFrom, epochTo)
 	dy := epochTo - epochFrom
@@ -90,6 +93,7 @@ func ApproxPosition(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, 
 // Construct with NewPrecessor, then call method Precess.
 // After construction, Precess may be called multiple times to precess
 // different coordinates with the same initial and final epochs.
+// 计算赤道坐标精确岁差要用到的变量
 type Precessor struct {
 	ζ      unit.RA
 	z      unit.Angle
@@ -116,6 +120,7 @@ var (
 
 // NewPrecessor constructs a Precessor object and initializes it to precess
 // coordinates from epochFrom to epochTo.
+// 构造赤道坐标岁差计算要素
 func NewPrecessor(epochFrom, epochTo float64) *Precessor {
 	// (21.2) p. 134
 	ζCoeff := ζt
@@ -150,6 +155,7 @@ func NewPrecessor(epochFrom, epochTo float64) *Precessor {
 //
 // The same struct may be used for eqFrom and eqTo.
 // EqTo is returned for convenience.
+// 赤道坐标的岁差转换计算
 func (p *Precessor) Precess(eqFrom, eqTo *coord.Equatorial) *coord.Equatorial {
 	// (21.4) p. 134
 	sδ, cδ := eqFrom.Dec.Sincos()
@@ -177,6 +183,7 @@ func (p *Precessor) Precess(eqFrom, eqTo *coord.Equatorial) *coord.Equatorial {
 //
 // Both eqFrom and eqTo must be non-nil, although they may point to the same
 // struct.  EqTo is returned for convenience.
+// 考虑自行运动的赤道坐标的转换
 func Position(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, mα unit.HourAngle, mδ unit.Angle) *coord.Equatorial {
 	p := NewPrecessor(epochFrom, epochTo)
 	t := epochTo - epochFrom
@@ -190,6 +197,7 @@ func Position(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, mα un
 // Construct with NewEclipticPrecessor, then call method Precess.
 // After construction, Precess may be called multiple times to precess
 // different coordinates with the same initial and final epochs.
+// 计算黄道坐标精确岁差要用到的变量
 type EclipticPrecessor struct {
 	sη, cη float64
 	π, p   unit.Angle
@@ -209,6 +217,7 @@ var (
 
 // NewEclipticPrecessor constructs an EclipticPrecessor object and initializes
 // it to precess coordinates from epochFrom to epochTo.
+// 构造黄道坐标岁差计算要素
 func NewEclipticPrecessor(epochFrom, epochTo float64) *EclipticPrecessor {
 	// (21.5) p. 136
 	ηCoeff := ηt
@@ -243,6 +252,7 @@ func NewEclipticPrecessor(epochFrom, epochTo float64) *EclipticPrecessor {
 //
 // The same struct may be used for eclFrom and eclTo.
 // EclTo is returned for convenience.
+// 黄道坐标的岁差转换
 func (p *EclipticPrecessor) Precess(eclFrom, eclTo *coord.Ecliptic) *coord.Ecliptic {
 	// (21.7) p. 137
 	sβ, cβ := eclFrom.Lat.Sincos()
@@ -291,6 +301,8 @@ func (p *EclipticPrecessor) ReduceElements(eFrom, eTo *elementequinox.Elements) 
 //
 // Both eclFrom and eclTo must be non-nil, although they may point to the same
 // struct.  EclTo is returned for convenience.
+// 考虑自行运动的黄道坐标的转换，
+// 注意此处的mα，mδ是赤道坐标系中的数值，要先转换为黄道坐标mλ, mβ
 func EclipticPosition(eclFrom, eclTo *coord.Ecliptic, epochFrom, epochTo float64, mα unit.HourAngle, mδ unit.Angle) *coord.Ecliptic {
 	p := NewEclipticPrecessor(epochFrom, epochTo)
 	*eclTo = *eclFrom
@@ -303,6 +315,7 @@ func EclipticPosition(eclFrom, eclTo *coord.Ecliptic, epochFrom, epochTo float64
 	return p.Precess(eclTo, eclTo)
 }
 
+// 将自行运动由赤道坐标转黄道坐标
 func eqProperMotionToEcl(mα unit.HourAngle, mδ unit.Angle, epoch float64, pos *coord.Ecliptic) (mλ, mβ unit.Angle) {
 	ε := nutation.MeanObliquity(base.JulianYearToJDE(epoch))
 	sε, cε := ε.Sincos()
@@ -324,6 +337,7 @@ func eqProperMotionToEcl(mα unit.HourAngle, mδ unit.Angle, epoch float64, pos 
 //
 // Both eqFrom and eqTo must be non-nil, although they may point to the same
 // struct.  EqTo is returned for convenience.
+// 自行运动导致的赤道坐标变化的精确计算(不在当成常量乘以时间间隔)
 func ProperMotion3D(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo, r, mr float64, mα unit.HourAngle, mδ unit.Angle) *coord.Equatorial {
 	sα, cα := eqFrom.RA.Sincos()
 	sδ, cδ := eqFrom.Dec.Sincos()
