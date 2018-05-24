@@ -8,10 +8,10 @@ package jupitermoons_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/deltat"
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/jupitermoons"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/deltat"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/jupitermoons"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

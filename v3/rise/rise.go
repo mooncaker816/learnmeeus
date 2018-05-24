@@ -18,13 +18,13 @@ import (
 	"errors"
 	"math"
 
-	"github.com/soniakeys/meeus/v3/deltat"
-	"github.com/soniakeys/meeus/v3/elliptic"
-	"github.com/soniakeys/meeus/v3/globe"
-	"github.com/soniakeys/meeus/v3/interp"
-	"github.com/soniakeys/meeus/v3/julian"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/sidereal"
+	"github.com/mooncaker816/learnmeeus/v3/deltat"
+	"github.com/mooncaker816/learnmeeus/v3/elliptic"
+	"github.com/mooncaker816/learnmeeus/v3/globe"
+	"github.com/mooncaker816/learnmeeus/v3/interp"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/sidereal"
 	"github.com/soniakeys/unit"
 )
 

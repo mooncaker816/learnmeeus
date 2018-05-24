@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/soniakeys/meeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/base"
 )
 
 func ExampleFloorDiv() {

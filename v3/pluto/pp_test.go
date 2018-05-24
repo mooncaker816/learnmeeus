@@ -8,8 +8,8 @@ package pluto_test
 import (
 	"fmt"
 
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/pluto"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/pluto"
 	"github.com/soniakeys/sexagesimal"
 )
 

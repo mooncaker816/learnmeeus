@@ -42,10 +42,10 @@ package precess
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/coord"
-	"github.com/soniakeys/meeus/v3/elementequinox"
-	"github.com/soniakeys/meeus/v3/nutation"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/coord"
+	"github.com/mooncaker816/learnmeeus/v3/elementequinox"
+	"github.com/mooncaker816/learnmeeus/v3/nutation"
 	"github.com/soniakeys/unit"
 )
 

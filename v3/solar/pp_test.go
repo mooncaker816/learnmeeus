@@ -8,9 +8,9 @@ package solar_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/solar"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/solar"
 	"github.com/soniakeys/sexagesimal"
 )
 

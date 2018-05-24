@@ -6,8 +6,8 @@ package eqtime_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/eqtime"
-	"github.com/soniakeys/meeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/eqtime"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
 	"github.com/soniakeys/sexagesimal"
 )
 

@@ -8,8 +8,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/line"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/line"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

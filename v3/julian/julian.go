@@ -19,7 +19,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/base"
 )
 
 // CalendarGregorianToJD converts a Gregorian year, month, and day of month

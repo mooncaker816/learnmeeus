@@ -7,7 +7,7 @@
 package planetelements
 
 import (
-	"github.com/soniakeys/meeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/base"
 	"github.com/soniakeys/unit"
 )
 

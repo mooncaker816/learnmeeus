@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/node"
-	"github.com/soniakeys/meeus/v3/perihelion"
-	"github.com/soniakeys/meeus/v3/planetelements"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/node"
+	"github.com/mooncaker816/learnmeeus/v3/perihelion"
+	"github.com/mooncaker816/learnmeeus/v3/planetelements"
 	"github.com/soniakeys/unit"
 )
 

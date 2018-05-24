@@ -7,11 +7,11 @@ package apparent
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/coord"
-	"github.com/soniakeys/meeus/v3/nutation"
-	"github.com/soniakeys/meeus/v3/precess"
-	"github.com/soniakeys/meeus/v3/solar"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/coord"
+	"github.com/mooncaker816/learnmeeus/v3/nutation"
+	"github.com/mooncaker816/learnmeeus/v3/precess"
+	"github.com/mooncaker816/learnmeeus/v3/solar"
 	"github.com/soniakeys/unit"
 )
 
@@ -19,6 +19,7 @@ import (
 // of an object.
 //
 // Results are invalid for objects very near the celestial poles.
+// 章动导致的赤道坐标修正
 func Nutation(α unit.RA, δ unit.Angle, jd float64) (Δα1 unit.HourAngle, Δδ1 unit.Angle) {
 	ε := nutation.MeanObliquity(jd)
 	sε, cε := ε.Sincos()
@@ -35,17 +36,19 @@ func Nutation(α unit.RA, δ unit.Angle, jd float64) (Δα1 unit.HourAngle, Δδ
 var κ = unit.AngleFromSec(20.49552)
 
 // longitude of perihelian of Earth's orbit.
+// 近日点经度
 func perihelion(T float64) unit.Angle {
 	return unit.AngleFromDeg(base.Horner(T, 102.93735, 1.71946, .00046))
 }
 
 // EclipticAberration returns corrections due to aberration for ecliptic
 // coordinates of an object.
+// 光行差导致的黄道坐标的修正
 func EclipticAberration(λ, β unit.Angle, jd float64) (Δλ, Δβ unit.Angle) {
 	T := base.J2000Century(jd)
-	s, _ := solar.True(T)
-	e := solar.Eccentricity(T)
-	π := perihelion(T)
+	s, _ := solar.True(T)      //太阳真黄经
+	e := solar.Eccentricity(T) //地球轨道离心率
+	π := perihelion(T)         //地球近日点经度
 	sβ, cβ := β.Sincos()
 	ssλ, csλ := (s - λ).Sincos()
 	sπλ, cπλ := (π - λ).Sincos()
@@ -57,6 +60,7 @@ func EclipticAberration(λ, β unit.Angle, jd float64) (Δλ, Δβ unit.Angle) {
 
 // Aberration returns corrections due to aberration for equatorial
 // coordinates of an object.
+// 光行差导致的赤道坐标的修正
 func Aberration(α unit.RA, δ unit.Angle, jd float64) (Δα2 unit.HourAngle, Δδ2 unit.Angle) {
 	ε := nutation.MeanObliquity(jd)
 	T := base.J2000Century(jd)
@@ -83,6 +87,7 @@ func Aberration(α unit.RA, δ unit.Angle, jd float64) (Δα2 unit.HourAngle, Δ
 // Position is computed for equatorial coordinates in eqFrom, considering
 // proper motion, precession, nutation, and aberration.  Result is in
 // eqTo.  EqFrom and eqTo must be non-nil, but may point to the same struct.
+// 计算天体的视位置，考虑了自行运动，岁差，章动，光行差
 func Position(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, mα unit.HourAngle, mδ unit.Angle) *coord.Equatorial {
 	precess.Position(eqFrom, eqTo, epochFrom, epochTo, mα, mδ)
 	jd := base.JulianYearToJDE(epochTo)
@@ -95,6 +100,7 @@ func Position(eqFrom, eqTo *coord.Equatorial, epochFrom, epochTo float64, mα un
 
 // AberrationRonVondrak uses the Ron-Vondrák expression to compute corrections
 // due to aberration for equatorial coordinates of an object.
+// RonVondrak方法计算光行差引起的赤道坐标的修正
 func AberrationRonVondrak(α unit.RA, δ unit.Angle, jd float64) (Δα unit.HourAngle, Δδ unit.Angle) {
 	T := base.J2000Century(jd)
 	r := &rv{
@@ -297,15 +303,20 @@ var rvTerm = [36]rvFunc{
 //
 // Note the Ron-Vondrák expression is only valid for the epoch J2000.
 // EqFrom must be coordinates at epoch J2000.
+// 采用Ron-Vondrák计算光行差，计算天体视位置
 func PositionRonVondrak(eqFrom, eqTo *coord.Equatorial, epochTo float64, mα unit.HourAngle, mδ unit.Angle) *coord.Equatorial {
 	t := epochTo - 2000
+	// 自行运动
 	eqTo.RA = eqFrom.RA.Add(mα.Mul(t))
 	eqTo.Dec = eqFrom.Dec + mδ.Mul(t)
 	jd := base.JulianYearToJDE(epochTo)
+	// 光行差
 	Δα, Δδ := AberrationRonVondrak(eqTo.RA, eqTo.Dec, jd)
 	eqTo.RA = eqTo.RA.Add(Δα)
 	eqTo.Dec += Δδ
+	// 岁差
 	precess.Position(eqTo, eqTo, 2000, epochTo, 0, 0)
+	// 章动
 	Δα1, Δδ1 := Nutation(eqTo.RA, eqTo.Dec, jd)
 	eqTo.RA = eqTo.RA.Add(Δα1)
 	eqTo.Dec += Δδ1

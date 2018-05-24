@@ -7,7 +7,7 @@ package moonnode
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/base"
 )
 
 // Ascending returns the date of passage of the Moon through an ascending node.

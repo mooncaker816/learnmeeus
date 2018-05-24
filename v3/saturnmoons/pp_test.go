@@ -8,8 +8,8 @@ package saturnmoons_test
 import (
 	"fmt"
 
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/saturnmoons"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/saturnmoons"
 )
 
 func ExamplePositions() {

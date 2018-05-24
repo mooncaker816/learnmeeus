@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/apsis"
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/moonposition"
+	"github.com/mooncaker816/learnmeeus/v3/apsis"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/moonposition"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

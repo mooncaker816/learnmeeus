@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/coord"
-	"github.com/soniakeys/meeus/v3/globe"
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/sidereal"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/coord"
+	"github.com/mooncaker816/learnmeeus/v3/globe"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/sidereal"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

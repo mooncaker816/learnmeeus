@@ -1,4 +1,4 @@
-module github.com/soniakeys/meeus/v3
+module github.com/mooncaker816/learnmeeus/v3
 
 require (
 	github.com/soniakeys/sexagesimal v1.0.0

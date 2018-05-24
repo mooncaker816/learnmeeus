@@ -22,8 +22,8 @@ package jm
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
 )
 
 // JewishCalendar returns interesting dates and facts about a given year.

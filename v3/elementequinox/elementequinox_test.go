@@ -6,7 +6,7 @@ package elementequinox_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/elementequinox"
+	"github.com/mooncaker816/learnmeeus/v3/elementequinox"
 	"github.com/soniakeys/unit"
 )
 

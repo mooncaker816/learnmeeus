@@ -7,8 +7,8 @@ package semidiameter
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/parallax"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/parallax"
 	"github.com/soniakeys/unit"
 )
 

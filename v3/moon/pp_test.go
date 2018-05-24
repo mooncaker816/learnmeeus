@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/moon"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/moon"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 	"github.com/soniakeys/unit"
 )
 

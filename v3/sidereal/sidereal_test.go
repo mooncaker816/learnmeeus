@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/mooncaker816/learnmeeus/v3/sidereal"
-	"github.com/soniakeys/meeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
 	"github.com/soniakeys/sexagesimal"
 )
 

@@ -7,8 +7,8 @@ package eclipse
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/moonphase"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/moonphase"
 	"github.com/soniakeys/unit"
 )
 

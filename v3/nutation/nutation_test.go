@@ -8,8 +8,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/nutation"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/nutation"
 	"github.com/soniakeys/sexagesimal"
 )
 

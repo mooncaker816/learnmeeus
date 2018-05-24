@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/solardisk"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/solardisk"
 )
 
 func ExampleCycle() {

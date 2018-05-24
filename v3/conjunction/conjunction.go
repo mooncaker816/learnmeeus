@@ -7,7 +7,7 @@ package conjunction
 import (
 	"errors"
 
-	"github.com/soniakeys/meeus/v3/interp"
+	"github.com/mooncaker816/learnmeeus/v3/interp"
 	"github.com/soniakeys/unit"
 )
 

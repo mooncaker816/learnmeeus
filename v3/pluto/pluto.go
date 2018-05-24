@@ -7,9 +7,9 @@ package pluto
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/elliptic"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/elliptic"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 	"github.com/soniakeys/unit"
 )
 

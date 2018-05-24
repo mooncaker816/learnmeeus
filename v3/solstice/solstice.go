@@ -7,9 +7,9 @@ package solstice
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/solar"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/solar"
 	"github.com/soniakeys/unit"
 )
 

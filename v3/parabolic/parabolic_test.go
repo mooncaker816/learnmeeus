@@ -6,8 +6,8 @@ package parabolic_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/parabolic"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/parabolic"
 )
 
 func ExampleElements_AnomalyDistance() {

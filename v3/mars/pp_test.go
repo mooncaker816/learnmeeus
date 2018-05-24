@@ -8,8 +8,8 @@ package mars_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/mars"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/mars"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 )
 
 func ExamplePhysical() {

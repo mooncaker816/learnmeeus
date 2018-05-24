@@ -8,7 +8,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/soniakeys/meeus/v3/refraction"
+	"github.com/mooncaker816/learnmeeus/v3/refraction"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

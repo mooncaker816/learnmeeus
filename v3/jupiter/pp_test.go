@@ -8,8 +8,8 @@ package jupiter_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/jupiter"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/jupiter"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 )
 
 func ExamplePhysical() {

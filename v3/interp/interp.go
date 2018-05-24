@@ -24,7 +24,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/base"
 )
 
 // Error values returned by functions and methods in this package.

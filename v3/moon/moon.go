@@ -9,13 +9,13 @@ package moon
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/coord"
-	"github.com/soniakeys/meeus/v3/moonposition"
-	"github.com/soniakeys/meeus/v3/nutation"
-	//	"github.com/soniakeys/meeus/v3/parallax"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/solar"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/coord"
+	"github.com/mooncaker816/learnmeeus/v3/moonposition"
+	"github.com/mooncaker816/learnmeeus/v3/nutation"
+	//	"github.com/mooncaker816/learnmeeus/v3/parallax"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/solar"
 	"github.com/soniakeys/unit"
 )
 

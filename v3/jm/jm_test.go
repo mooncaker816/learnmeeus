@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/soniakeys/meeus/v3/jm"
+	"github.com/mooncaker816/learnmeeus/v3/jm"
 )
 
 func ExampleJewishCalendar() {

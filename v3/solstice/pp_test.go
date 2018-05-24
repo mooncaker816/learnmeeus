@@ -8,8 +8,8 @@ package solstice_test
 import (
 	"fmt"
 
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/solstice"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/solstice"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

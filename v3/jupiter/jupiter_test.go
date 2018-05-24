@@ -6,7 +6,7 @@ package jupiter_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/jupiter"
+	"github.com/mooncaker816/learnmeeus/v3/jupiter"
 )
 
 func ExamplePhysical2() {

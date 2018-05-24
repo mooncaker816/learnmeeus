@@ -10,13 +10,13 @@ package elliptic
 import (
 	"math"
 
-	"github.com/soniakeys/meeus/v3/apparent"
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/coord"
-	"github.com/soniakeys/meeus/v3/kepler"
-	"github.com/soniakeys/meeus/v3/nutation"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
-	"github.com/soniakeys/meeus/v3/solarxyz"
+	"github.com/mooncaker816/learnmeeus/v3/apparent"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/coord"
+	"github.com/mooncaker816/learnmeeus/v3/kepler"
+	"github.com/mooncaker816/learnmeeus/v3/nutation"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/solarxyz"
 	"github.com/soniakeys/unit"
 )
 

@@ -6,7 +6,7 @@ package elliptic_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/elliptic"
+	"github.com/mooncaker816/learnmeeus/v3/elliptic"
 )
 
 func ExampleVelocity() {

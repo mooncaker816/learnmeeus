@@ -6,7 +6,7 @@ package circle_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/circle"
+	"github.com/mooncaker816/learnmeeus/v3/circle"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

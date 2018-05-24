@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/soniakeys/meeus/v3/julian"
-	pp "github.com/soniakeys/meeus/v3/planetposition"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	pp "github.com/mooncaker816/learnmeeus/v3/planetposition"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

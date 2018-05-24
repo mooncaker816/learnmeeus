@@ -8,11 +8,11 @@ import (
 	"math"
 	"testing"
 
-	"github.com/soniakeys/meeus/v3/base"
-	"github.com/soniakeys/meeus/v3/julian"
-	"github.com/soniakeys/meeus/v3/moonposition"
-	"github.com/soniakeys/meeus/v3/parallax"
-	"github.com/soniakeys/meeus/v3/sidereal"
+	"github.com/mooncaker816/learnmeeus/v3/base"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/moonposition"
+	"github.com/mooncaker816/learnmeeus/v3/parallax"
+	"github.com/mooncaker816/learnmeeus/v3/sidereal"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

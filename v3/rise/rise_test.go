@@ -6,8 +6,8 @@ package rise_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/globe"
-	"github.com/soniakeys/meeus/v3/rise"
+	"github.com/mooncaker816/learnmeeus/v3/globe"
+	"github.com/mooncaker816/learnmeeus/v3/rise"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

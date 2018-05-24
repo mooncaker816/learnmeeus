@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/soniakeys/meeus/v3/sundial"
+	"github.com/mooncaker816/learnmeeus/v3/sundial"
 	"github.com/soniakeys/unit"
 )
 

@@ -6,7 +6,7 @@ package moonphase_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/moonphase"
+	"github.com/mooncaker816/learnmeeus/v3/moonphase"
 )
 
 func ExampleMeanNew() {

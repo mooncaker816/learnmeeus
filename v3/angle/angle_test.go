@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/mooncaker816/learnmeeus/v3/angle"
-	"github.com/soniakeys/meeus/v3/julian"
+	"github.com/mooncaker816/learnmeeus/v3/julian"
 	"github.com/soniakeys/sexagesimal"
 	"github.com/soniakeys/unit"
 )

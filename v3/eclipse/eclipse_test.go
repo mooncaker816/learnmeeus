@@ -6,7 +6,7 @@ package eclipse_test
 import (
 	"fmt"
 
-	"github.com/soniakeys/meeus/v3/eclipse"
+	"github.com/mooncaker816/learnmeeus/v3/eclipse"
 )
 
 func ExampleSolar_1993() {
