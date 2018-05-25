@@ -16,6 +16,7 @@ import (
 
 // Position returns rectangular coordinates referenced to the mean equinox
 // of date.
+// Date 平分点太阳地心直角坐标
 func Position(e *pp.V87Planet, jde float64) (x, y, z float64) {
 	// (26.1) p. 171
 	s, β, R := solar.TrueVSOP87(e, jde)
@@ -29,12 +30,14 @@ func Position(e *pp.V87Planet, jde float64) (x, y, z float64) {
 }
 
 // LongitudeJ2000 returns geometric longitude referenced to equinox J2000.
+// J2000太阳地心黄经
 func LongitudeJ2000(e *pp.V87Planet, jde float64) (l unit.Angle) {
 	l, _, _ = e.Position2000(jde)
 	return (l + math.Pi - unit.AngleFromSec(.09033)).Mod1()
 }
 
 // PositionJ2000 returns rectangular coordinates referenced to equinox J2000.
+// J2000太阳直角坐标
 func PositionJ2000(e *pp.V87Planet, jde float64) (x, y, z float64) {
 	x, y, z = xyz(e, jde)
 	// (26.3) p. 174
@@ -57,6 +60,7 @@ func xyz(e *pp.V87Planet, jde float64) (x, y, z float64) {
 }
 
 // PositionB1950 returns rectangular coordinates referenced to B1950.
+// B1950 平分点参考系太阳直角坐标
 //
 // Results are referenced to the mean equator and equinox of the epoch B1950
 // in the FK5 system, not FK4.
@@ -74,6 +78,7 @@ var (
 )
 
 // PositionEquinox returns rectangular coordinates referenced to an arbitrary epoch.
+// 任意其它平分点参考系太阳直角坐标
 //
 // Position will be computed for given Julian day "jde" but referenced to mean
 // equinox "epoch" (year).
