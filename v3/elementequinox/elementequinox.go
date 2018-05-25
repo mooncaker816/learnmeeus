@@ -18,9 +18,9 @@ import (
 // Elements are the orbital elements of a solar system object which change
 // from one equinox to another.
 type Elements struct {
-	Inc  unit.Angle // inclination
-	Peri unit.Angle // argument of perihelion (ω)
-	Node unit.Angle // longitude of ascending node (Ω)
+	Inc  unit.Angle // inclination轨道倾角
+	Peri unit.Angle // argument of perihelion (ω)近日点参数
+	Node unit.Angle // longitude of ascending node (Ω)升交点经度
 }
 
 // ReduceB1950ToJ2000 reduces orbital elements of a solar system body from

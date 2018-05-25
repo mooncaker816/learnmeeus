@@ -27,6 +27,7 @@ import (
 )
 
 // True returns true geometric longitude and anomaly of the sun referenced to the mean equinox of date.
+// 计算太阳真黄经s，真近点角ν
 //
 // Argument T is the number of Julian centuries since J2000.
 // See base.J2000Century.
@@ -46,6 +47,7 @@ func True(T float64) (s, ν unit.Angle) {
 }
 
 // MeanAnomaly returns the mean anomaly of Earth at the given T.
+// 太阳平近点角
 //
 // Argument T is the number of Julian centuries since J2000.
 // See base.J2000Century.
@@ -57,6 +59,7 @@ func MeanAnomaly(T float64) unit.Angle {
 }
 
 // Eccentricity returns eccentricity of the Earth's orbit around the sun.
+// 地球轨道离心率
 //
 // Argument T is the number of Julian centuries since J2000.
 // See base.J2000Century.
@@ -66,6 +69,7 @@ func Eccentricity(T float64) float64 {
 }
 
 // Radius returns the Sun-Earth distance in AU.
+// 日地距离，单位为 AU
 //
 // Argument T is the number of Julian centuries since J2000.
 // See base.J2000Century.
@@ -78,6 +82,7 @@ func Radius(T float64) float64 {
 
 // ApparentLongitude returns apparent longitude of the Sun referenced
 // to the true equinox of date.
+// 太阳视黄经，考虑了章动和光行差
 //
 // Argument T is the number of Julian centuries since J2000.
 // See base.J2000Century.
@@ -104,6 +109,7 @@ func node(T float64) unit.Angle {
 // Results:
 //	s = true geometric longitude, ☉
 //	ν = true anomaly
+// J2000的太阳真黄经，真近点角
 func True2000(T float64) (s, ν unit.Angle) {
 	s, ν = True(T)
 	s -= unit.AngleFromDeg(.01397).Mul(T * 100)
@@ -111,6 +117,7 @@ func True2000(T float64) (s, ν unit.Angle) {
 }
 
 // TrueEquatorial returns the true geometric position of the Sun as equatorial coordinates.
+// 太阳真赤经，真赤纬
 func TrueEquatorial(jde float64) (α unit.RA, δ unit.Angle) {
 	s, _ := True(base.J2000Century(jde))
 	ε := nutation.MeanObliquity(jde)
@@ -123,6 +130,7 @@ func TrueEquatorial(jde float64) (α unit.RA, δ unit.Angle) {
 }
 
 // ApparentEquatorial returns the apparent position of the Sun as equatorial coordinates.
+// 太阳视赤经，视赤纬
 //
 //	α: right ascension in radians
 //	δ: declination in radians
@@ -140,6 +148,7 @@ func ApparentEquatorial(jde float64) (α unit.RA, δ unit.Angle) {
 }
 
 // TrueVSOP87 returns the true geometric position of the sun as ecliptic coordinates.
+// 根据VSOP87理论计算太阳真黄经，真黄纬，日地距离
 //
 // Result computed by full VSOP87 theory.  Result is at equator and equinox
 // of date in the FK5 frame.  It does not include nutation or aberration.
@@ -148,7 +157,7 @@ func ApparentEquatorial(jde float64) (α unit.RA, δ unit.Angle) {
 //	β: ecliptic latitude
 //	R: range in AU
 func TrueVSOP87(e *pp.V87Planet, jde float64) (s, β unit.Angle, R float64) {
-	l, b, r := e.Position(jde)
+	l, b, r := e.Position(jde) //VSOP87算出的地球的日心黄经，黄纬，日地距离
 	s = l + math.Pi
 	// FK5 correction.
 	λp := base.Horner(base.J2000Century(jde),
@@ -161,6 +170,8 @@ func TrueVSOP87(e *pp.V87Planet, jde float64) (s, β unit.Angle, R float64) {
 }
 
 // ApparentVSOP87 returns the apparent position of the sun as ecliptic coordinates.
+// 根据VSOP87理论计算太阳视黄经，视黄纬，日地距离，考虑了章动和光行差
+// 即真黄经+黄经章动+光行差，真黄纬，日地距离不变
 //
 // Result computed by VSOP87, at equator and equinox of date in the FK5 frame,
 // and includes effects of nutation and aberration.
@@ -177,6 +188,8 @@ func ApparentVSOP87(e *pp.V87Planet, jde float64) (λ, β unit.Angle, R float64)
 }
 
 // ApparentEquatorialVSOP87 returns the apparent position of the sun as equatorial coordinates.
+// 根据VSOP87理论计算太阳视赤经，视赤纬，日地距离，考虑了章动和光行差
+// 即先计算视黄经，视黄纬，此时考虑交角章动，用真黄赤交角转为赤道坐标
 //
 // Result computed by VSOP87, at equator and equinox of date in the FK5 frame,
 // and includes effects of nutation and aberration.
@@ -201,6 +214,7 @@ func ApparentEquatorialVSOP87(e *pp.V87Planet, jde float64) (α unit.RA, δ unit
 // because the low precision formula already gives position results to the
 // accuracy given on p. 165.  The high precision formula the represents lots
 // of typing with associated chance of typos, and no way to test the result.
+// 低精度光行差修正项
 func aberration(R float64) unit.Angle {
 	// (25.10) p. 167
 	return unit.AngleFromSec(-20.4898).Div(R)
