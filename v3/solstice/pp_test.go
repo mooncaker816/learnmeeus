@@ -25,6 +25,12 @@ func ExampleJune2() {
 	t := j - 2437836.5 // 0h 1962 June 21
 	// result is VSOP87 result given in example 27.a, p. 180
 	fmt.Println(sexa.FmtTime(unit.TimeFromDay(t)))
+	// y, m, d := julian.JDToCalendar(j)
+	// day, f := math.Modf(d)
+	// ΔT := deltat.Interp10A(j)
+	// fmt.Println(y, m, day)
+	// fmt.Println(ΔT)
+	// fmt.Println(sexa.FmtTime(unit.TimeFromDay(f) - ΔT))
 	// Output:
 	// 21ʰ24ᵐ42ˢ
 }
