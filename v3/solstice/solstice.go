@@ -58,6 +58,7 @@ var terms = []term{
 }
 
 // March returns the JDE of the March equinox for the given year.
+// 计算y年春分点力学时，y∈[-1000,3000]
 //
 // Results are valid for the years -1000 to +3000.
 //
@@ -70,6 +71,7 @@ func March(y int) float64 {
 }
 
 // June returns the JDE of the June solstice for the given year.
+// 计算y年夏至点力学时，y∈[-1000,3000]
 //
 // Results are valid for the years -1000 to +3000.
 //
@@ -82,6 +84,7 @@ func June(y int) float64 {
 }
 
 // September returns the JDE of the September equinox for the given year.
+// 计算y年秋分点力学时，y∈[-1000,3000]
 //
 // Results are valid for the years -1000 to +3000.
 //
@@ -94,6 +97,7 @@ func September(y int) float64 {
 }
 
 // December returns the JDE of the December solstice for a given year.
+// 计算y年冬至点力学时，y∈[-1000,3000]
 //
 // Results are valid for the years -1000 to +3000.
 //
@@ -119,6 +123,7 @@ func eq(y int, c []float64) float64 {
 }
 
 // March2 returns a more accurate JDE of the March equinox.
+// 高精度计算春分点力学时
 //
 // Result is accurate to one second of time.
 //
@@ -138,6 +143,7 @@ func March2(y int, e *pp.V87Planet) float64 {
 }
 
 // June2 returns a more accurate JDE of the June solstice.
+// 高精度计算夏至点力学时
 //
 // Result is accurate to one second of time.
 //
@@ -151,6 +157,7 @@ func June2(y int, e *pp.V87Planet) float64 {
 }
 
 // September2 returns a more accurate JDE of the September equinox.
+// 高精度计算秋分点力学时
 //
 // Result is accurate to one second of time.
 //
@@ -170,6 +177,7 @@ func September2(y int, e *pp.V87Planet) float64 {
 }
 
 // December2 returns a more accurate JDE of the December solstice.
+// 高精度计算冬至点力学时
 //
 // Result is accurate to one second of time.
 //
@@ -188,6 +196,8 @@ func December2(y int, e *pp.V87Planet) float64 {
 	return eq2(y-2000, e, math.Pi*3/2, dc2)
 }
 
+//先用低精度方法算出近似时刻，再采用VSOP87理论计算出该时刻的太阳视黄经λ，
+//再根据各个分至点的几何度数求该近似时刻的修正量，循环迭代，直至满足要求。
 func eq2(y int, e *pp.V87Planet, q unit.Angle, c []float64) float64 {
 	J0 := base.Horner(float64(y)*.001, c...)
 	for {
