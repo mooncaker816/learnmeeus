@@ -27,10 +27,10 @@ import (
 )
 
 // Table10A encodes ΔT for the range of years tableYear1 to tableYearN.
-// 1620-2010 ΔT数据表，用于插值计算
+// 1620-2018 ΔT数据表，用于插值计算
 var (
 	tableYear1 = 1620.
-	tableYearN = 2010.
+	tableYearN = 2018.
 	table10A   = []float64{
 		121.0, 112.0, 103.0, 95.0, 88.0, 82.0, 77.0, 72.0, 68.0, 63.0,
 		60.0, 56.0, 53.0, 51.0, 48.0, 46.0, 44.0, 42.0, 40.0, 38.0,
@@ -55,11 +55,11 @@ var (
 		24.3, 25.3, 26.2, 27.3, 28.2, 29.1, 30.0, 30.7, 31.4, 32.2,
 		33.1, 34.0, 35.0, 36.5, 38.3, 40.2, 42.2, 44.5, 46.5, 48.5,
 		50.5, 52.2, 53.8, 54.9, 55.8, 56.9, 58.3, 60.0, 61.6, 63.0,
-		63.8, 64.3, 64.6, 64.8, 65.5, 66.1}
+		63.8, 64.3, 64.6, 64.8, 65.5, 66.1, 66.6, 67.3, 68.1, 69.0}
 )
 
 // Interp10A returns ΔT at a date, accurate from years 1620 to 2010.
-// 根据上述观测数据，对于1620年至2010年之间的ΔT进行插值计算
+// 根据上述观测数据，对于1620年至2018年之间的ΔT进行插值计算
 func Interp10A(jde float64) (ΔT unit.Time) {
 	// kind of crazy, working in calendar years, but it seems that's what
 	// we're supposed to do.
