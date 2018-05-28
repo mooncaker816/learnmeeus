@@ -15,6 +15,7 @@ import (
 )
 
 // Ephemeris returns the apparent orientation of the sun at the given jd.
+// 计算日面参数
 //
 // Results:
 //	P:  Position angle of the solar north pole.
