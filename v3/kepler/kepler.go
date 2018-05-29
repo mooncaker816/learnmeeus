@@ -12,6 +12,7 @@ import (
 )
 
 // True returns true anomaly ν for given eccentric anomaly E.
+// 已知偏近点角E 和离心率 e,求真近点角
 //
 // Argument e is eccentricity.  E must be in radians.
 func True(E unit.Angle, e float64) unit.Angle {
@@ -20,6 +21,7 @@ func True(E unit.Angle, e float64) unit.Angle {
 }
 
 // Radius returns radius distance r for given eccentric anomaly E.
+// 已知偏近点角，离心率，半长轴，求 R
 //
 // Argument e is eccentricity, a is semimajor axis.
 //
@@ -30,6 +32,7 @@ func Radius(E unit.Angle, e, a float64) float64 {
 }
 
 // Kepler1 solves Kepler's equation by iteration.
+// 迭代求解开普勒方程
 //
 // The iterated formula is
 //
@@ -147,6 +150,7 @@ func Kepler3(e float64, M unit.Angle) (E unit.Angle) {
 }
 
 // Kepler4 returns an approximate solution to Kepler's equation.
+// 当 e 很小时近似求解 E
 //
 // It is valid only for small values of e.
 //
