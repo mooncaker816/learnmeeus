@@ -21,14 +21,15 @@ import (
 )
 
 // Position returns observed equatorial coordinates of a planet at a given time.
+// 行星p的地心视赤经，视赤纬
 //
 // Argument p must be a valid V87Planet object for the observed planet.
 // Argument earth must be a valid V87Planet object for Earth.
 //
 // Results are right ascension and declination, α and δ in radians.
 func Position(p, earth *pp.V87Planet, jde float64) (α unit.RA, δ unit.Angle) {
-	L0, B0, R0 := earth.Position(jde)
-	L, B, R := p.Position(jde)
+	L0, B0, R0 := earth.Position(jde) // 地球日心坐标
+	L, B, R := p.Position(jde)        // 行星日心坐标
 	sB0, cB0 := B0.Sincos()
 	sL0, cL0 := L0.Sincos()
 	sB, cB := B.Sincos()
@@ -47,8 +48,8 @@ func Position(p, earth *pp.V87Planet, jde float64) (α unit.RA, δ unit.Angle) {
 		y = R*cB*sL - R0*cB0*sL0
 		z = R*sB - R0*sB0
 	}
-	λ := unit.Angle(math.Atan2(y, x))                // (33.1) p. 223
-	β := unit.Angle(math.Atan2(z, math.Hypot(x, y))) // (33.2) p. 223
+	λ := unit.Angle(math.Atan2(y, x))                // (33.1) p. 223 行星的地心黄经 λ
+	β := unit.Angle(math.Atan2(z, math.Hypot(x, y))) // (33.2) p. 223 行星的地心黄纬 β
 	Δλ, Δβ := apparent.EclipticAberration(λ, β, jde)
 	λ, β = pp.ToFK5(λ+Δλ, β+Δβ, jde)
 	Δψ, Δε := nutation.Nutation(jde)
@@ -61,12 +62,12 @@ func Position(p, earth *pp.V87Planet, jde float64) (α unit.RA, δ unit.Angle) {
 
 // Elements holds keplerian elements.
 type Elements struct {
-	Axis  float64    // Semimajor axis, a, in AU
-	Ecc   float64    // Eccentricity, e
-	Inc   unit.Angle // Inclination, i
-	ArgP  unit.Angle // Argument of perihelion, ω
-	Node  unit.Angle // Longitude of ascending node, Ω
-	TimeP float64    // Time of perihelion, T, as jde
+	Axis  float64    // Semimajor axis, a, in AU 半长轴
+	Ecc   float64    // Eccentricity, e 离心率
+	Inc   unit.Angle // Inclination, i 轨道倾角
+	ArgP  unit.Angle // Argument of perihelion, ω 近点参数
+	Node  unit.Angle // Longitude of ascending node, Ω 升交点经度
+	TimeP float64    // Time of perihelion, T, as jde 近日点 jde
 }
 
 // Position returns observed equatorial coordinates of a body with Keplerian elements.
@@ -124,8 +125,8 @@ func (k *Elements) Position(jde float64, e *pp.V87Planet) (α unit.RA, δ, ψ un
 //
 // Results are J2000 right ascention, declination, and elongation.
 func AstrometricJ2000(f func(float64) (x, y, z float64), jde float64, e *pp.V87Planet) (α unit.RA, δ, ψ unit.Angle) {
-	X, Y, Z := solarxyz.PositionJ2000(e, jde)
-	x, y, z := f(jde)
+	X, Y, Z := solarxyz.PositionJ2000(e, jde) // 太阳直角坐标
+	x, y, z := f(jde)                         // 日心直角赤道坐标
 	// (33.10) p. 229
 	ξ := X + x
 	η := Y + y
@@ -147,6 +148,7 @@ func AstrometricJ2000(f func(float64) (x, y, z float64), jde float64, e *pp.V87P
 }
 
 // Velocity returns instantaneous velocity of a body in elliptical orbit around the Sun.
+// 椭圆轨道上天体的瞬时速度
 //
 // Argument a is the semimajor axis of the body, r is the instaneous distance
 // to the Sun, both in AU.
@@ -156,7 +158,8 @@ func Velocity(a, r float64) float64 {
 	return 42.1219 * math.Sqrt(1/r-.5/a)
 }
 
-// Velocity returns the velocity of a body at aphelion.
+// VAphelion returns the velocity of a body at aphelion.
+// 远日点速度
 //
 // Argument a is the semimajor axis of the body in AU, e is eccentricity.
 //
@@ -165,7 +168,8 @@ func VAphelion(a, e float64) float64 {
 	return 29.7847 * math.Sqrt((1-e)/(1+e)/a)
 }
 
-// Velocity returns the velocity of a body at perihelion.
+// VPerihelion returns the velocity of a body at perihelion.
+// 近日点速度
 //
 // Argument a is the semimajor axis of the body in AU, e is eccentricity.
 //
@@ -176,6 +180,7 @@ func VPerihelion(a, e float64) float64 {
 
 // Length1 returns Ramanujan's approximation for the length of an elliptical
 // orbit.
+// 椭圆轨道的近似周长1
 //
 // Argument a is semimajor axis, e is eccentricity.
 //
@@ -187,6 +192,7 @@ func Length1(a, e float64) float64 {
 
 // Length2 returns an alternate approximation for the length of an elliptical
 // orbit.
+// 椭圆轨道的近似周长2
 //
 // Argument a is semimajor axis, e is eccentricity.
 //
@@ -227,6 +233,7 @@ func Length3(a, e float64) float64 {
 }*/
 
 // Length4 returns the length of an elliptical orbit.
+// 椭圆轨道的近似周长4
 //
 // Argument a is semimajor axis, e is eccentricity.
 //
