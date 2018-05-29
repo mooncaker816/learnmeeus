@@ -30,12 +30,12 @@ const (
 //	Mean Anomaly, M = Lon - Peri
 //	Argument of Perihelion, ω = Peri - Node
 type Elements struct {
-	Lon  unit.Angle // mean longitude, L
-	Axis float64    // semimajor axis, a
-	Ecc  float64    // eccentricity, e
-	Inc  unit.Angle // inclination, i
-	Node unit.Angle // longitude of ascending node, Ω
-	Peri unit.Angle // longitude of perihelion, ϖ (Meeus likes π better)
+	Lon  unit.Angle // mean longitude, L 行星平黄经
+	Axis float64    // semimajor axis, a 轨道半长轴
+	Ecc  float64    // eccentricity, e 轨道的离心率
+	Inc  unit.Angle // inclination, i 行星轨道的倾角(与黄道的夹角)
+	Node unit.Angle // longitude of ascending node, Ω 升交点黄经
+	Peri unit.Angle // longitude of perihelion, ϖ (Meeus likes π better) 近日点经度
 }
 
 type c6 struct {
@@ -111,6 +111,7 @@ var cMean = []c6{
 }
 
 // Mean returns mean orbital elements for a planet
+// 计算行星轨道平要素
 //
 // Argument p must be a planet const as defined above, argument e is
 // a result parameter.  A valid non-nil pointer to an Elements struct
