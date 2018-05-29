@@ -20,6 +20,9 @@ type Elements struct {
 }
 
 // AnomalyDistance returns true anomaly and distance for near-parabolic orbits.
+// 离心率在1附近不为1时，计算近点角，近日点距离(Landgraf法)
+// e 略大于1 ：轻微双曲线轨道
+// e 略小于1 ：椭圆轨道
 //
 // Distance r returned in AU.
 // An error is returned if the algorithm fails to converge.

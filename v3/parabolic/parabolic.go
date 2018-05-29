@@ -13,11 +13,12 @@ import (
 
 // Elements holds parabolic elements needed for computing true anomaly and distance.
 type Elements struct {
-	TimeP float64 // time of perihelion, T, as JD
-	PDis  float64 // perihelion distance, q, in AU
+	TimeP float64 // time of perihelion, T, as JD // 近日点时间
+	PDis  float64 // perihelion distance, q, in AU // 近日点距离
 }
 
 // AnomalyDistance returns true anomaly and distance of a body in a parabolic orbit of the Sun.
+// 离心率等于1时，轨道为抛物线，可以由此函数求得近点角和距离
 //
 // Distance r returned in AU.
 func (e *Elements) AnomalyDistance(jde float64) (ν unit.Angle, r float64) {
