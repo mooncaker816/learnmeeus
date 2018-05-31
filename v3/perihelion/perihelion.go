@@ -44,6 +44,7 @@ const (
 )
 
 // Perihelion returns an approximate jde of the perihelion event nearest the given time.
+// 近似计算行星的近日点时间
 //
 // Argument p must be one of the planet constants above, y is a year number
 // indicating a time near the perihelion event.
@@ -56,6 +57,7 @@ func pf(x float64) float64 {
 }
 
 // Aphelion returns an approximate jde of the aphelion event nearest the given time.
+// 近似计算行星的远日点时间
 //
 // Argument p must be one of the planet constants above, y is a year number
 // indicating a time near the aphelion event.
@@ -74,7 +76,7 @@ func ap(p int, y float64, a bool, f func(float64) float64) float64 {
 	}
 	k := f(ka[i].a * (y - ka[i].b))
 	j := base.Horner(k, c[i]...)
-	if p == Earth {
+	if p == Earth { // 对地球的修正
 		c := ep
 		if a {
 			c = ea
@@ -120,10 +122,11 @@ var ec = []ab{
 	{249.52, 329.653368},
 }
 
-var ep = []float64{1.278, -.055, -.091, -.056, -.045}
-var ea = []float64{-1.352, .061, .062, .029, .031}
+var ep = []float64{1.278, -.055, -.091, -.056, -.045} // 地球近日点修正系数
+var ea = []float64{-1.352, .061, .062, .029, .031}    // 地球远日点修正系数
 
 // Perihelion2 returns the perihelion event nearest the given time.
+// 根据近似近日点和可接受误差，插值求解精确近日点
 //
 // Argument p must be one of the planet constants Mercury through Neptune;
 // EMBary is not allowed.  Y is a year number near the perihelion event.
@@ -137,6 +140,7 @@ func Perihelion2(p int, y, d float64, v *pp.V87Planet) (jde, r float64) {
 }
 
 // Aphelion2 returns the aphelion event nearest the given time.
+// 根据近似远日点和可接受误差，插值求解精确远日点
 //
 // Argument p must be one of the planet constants Mercury through Neptune;
 // EMBary is not allowed.  Y is a year number near the perihelion event.
@@ -169,7 +173,7 @@ func ap2a(j1, d float64, a bool, v *pp.V87Planet) (jde, r float64) {
 	_, _, rr[0] = v.Position2000(j0)
 	_, _, rr[1] = v.Position2000(j1)
 	_, _, rr[2] = v.Position2000(j2)
-	for {
+	for { // 循环直到找到满足3点插值的三个时间点（中间时间点对应的距离为最大或最小）
 		if a {
 			if rr[1] > rr[0] && rr[1] > rr[2] {
 				break
@@ -199,7 +203,7 @@ func ap2a(j1, d float64, a bool, v *pp.V87Planet) (jde, r float64) {
 	if err != nil {
 		panic(err) // unexpected.
 	}
-	jde, r, err = l.Extremum()
+	jde, r, err = l.Extremum() // 求极值
 	if err != nil {
 		panic(err) // unexpected.
 	}
