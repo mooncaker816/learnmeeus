@@ -15,16 +15,18 @@ import (
 
 // Mean computes some intermediate values for a mean planetary configuration
 // given a year and a row of coefficients from Table 36.A, p. 250.
+// 计算参数 J,M,T
 func mean(y float64, a *ca) (J, M, T float64) {
 	// (36.1) p. 250
 	k := math.Floor((365.2425*y+1721060-a.A)/a.B + .5)
-	J = a.A + k*a.B
+	J = a.A + k*a.B //平星象日
 	M = unit.PMod(a.M0+k*a.M1, 360) * math.Pi / 180
 	T = base.J2000Century(J)
 	return
 }
 
 // Sum computes a sum of periodic terms.
+// 周期项的和
 func sum(T, M float64, c [][]float64) float64 {
 	j := base.Horner(T, c[0]...)
 	mm := 0.
@@ -39,12 +41,14 @@ func sum(T, M float64, c [][]float64) float64 {
 }
 
 // Ms returns a mean time corrected by a sum.
+// 对平星象日进行周期项修正
 func ms(y float64, a *ca, c [][]float64) float64 {
 	J, M, T := mean(y, a)
 	return J + sum(T, M, c)
 }
 
 // MercuryInfConj returns the time of an inferior conjunction of Mercury.
+// 计算水星的下合日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -53,6 +57,7 @@ func MercuryInfConj(y float64) (jde float64) {
 }
 
 // MercurySupConj returns the time of a superior conjunction of Mercury.
+// 计算水星的上合日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -61,6 +66,7 @@ func MercurySupConj(y float64) (jde float64) {
 }
 
 // VenusInfConj returns the time of an inferior conjunction of Venus.
+// 计算金星的下合日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -69,6 +75,7 @@ func VenusInfConj(y float64) (jde float64) {
 }
 
 // MarsOpp returns the time of an opposition of Mars.
+// 计算火星的冲日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -77,6 +84,7 @@ func MarsOpp(y float64) (jde float64) {
 }
 
 // SumA computes the sum of periodic terms with "additional angles"
+// 计算带额外周期项的周期项之和
 func sumA(T, M float64, c [][]float64, aa []caa) float64 {
 	i := len(c) - 2*len(aa)
 	j := sum(T, M, c[:i])
@@ -91,12 +99,14 @@ func sumA(T, M float64, c [][]float64, aa []caa) float64 {
 }
 
 // Msa returns a mean time corrected by a sum.
+// 对平星象日进行周期项修正
 func msa(y float64, a *ca, c [][]float64, aa []caa) float64 {
 	J, M, T := mean(y, a)
 	return J + sumA(T, M, c, aa)
 }
 
 // JupiterOpp returns the time of an opposition of Jupiter.
+// 计算木星的冲日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -104,7 +114,17 @@ func JupiterOpp(y float64) (jde float64) {
 	return msa(y, joA, joB, jaa)
 }
 
+// JupiterConj returns the time of an conjunction of Jupiter.
+// 计算木星的冲日
+//
+// Result is time (as a jde) of the event nearest the given time (as a
+// decimal year.)
+func JupiterConj(y float64) (jde float64) {
+	return msa(y, jcA, jcB, jaa)
+}
+
 // SaturnOpp returns the time of an opposition of Saturn.
+// 计算土星的冲日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -113,6 +133,7 @@ func SaturnOpp(y float64) (jde float64) {
 }
 
 // SaturnConj returns the time of a conjunction of Saturn.
+// 计算土星的合日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -121,6 +142,7 @@ func SaturnConj(y float64) (jde float64) {
 }
 
 // UranusOpp returns the time of an opposition of Uranus.
+// 计算天王星的冲日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -128,12 +150,31 @@ func UranusOpp(y float64) (jde float64) {
 	return msa(y, uoA, uoB, uaa)
 }
 
+// UranusConj returns the time of an conjunction of Uranus.
+// 计算天王星的合日
+//
+// Result is time (as a jde) of the event nearest the given time (as a
+// decimal year.)
+func UranusConj(y float64) (jde float64) {
+	return msa(y, ucA, ucB, uaa)
+}
+
 // NeptuneOpp returns the time of an opposition of Neptune.
+// 计算海王星的冲日
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
 func NeptuneOpp(y float64) (jde float64) {
 	return msa(y, noA, noB, naa)
+}
+
+// NeptuneConj returns the time of an conjunction of Neptune.
+// 计算海王星的冲日
+//
+// Result is time (as a jde) of the event nearest the given time (as a
+// decimal year.)
+func NeptuneConj(y float64) (jde float64) {
+	return msa(y, ncA, ncB, naa)
 }
 
 // El computes time and elongation of a greatest elongation event.
@@ -143,6 +184,7 @@ func el(y float64, a *ca, t, e [][]float64) (jde float64, elongation unit.Angle)
 }
 
 // MercuryEastElongation returns the time and elongation of a greatest eastern elongation of Mercury.
+// 水星最大东角距
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -151,6 +193,7 @@ func MercuryEastElongation(y float64) (jde float64, elongation unit.Angle) {
 }
 
 // MercuryWestElongation returns the time and elongation of a greatest western elongation of Mercury.
+// 水星最大西角距
 //
 // Result is time (as a jde) of the event nearest the given time (as a
 // decimal year.)
@@ -169,24 +212,33 @@ type ca struct {
 }
 
 // Table 36.A, p. 250
+// 各行星冲合的 A B M0 M1
 var (
-	micA = &ca{2451612.023, 115.8774771, 63.5867, 114.2088742}
-	mscA = &ca{2451554.084, 115.8774771, 6.4822, 114.2088742}
-	vicA = &ca{2451996.706, 583.921361, 82.7311, 215.513058}
+	micA = &ca{2451612.023, 115.8774771, 63.5867, 114.2088742} //水星下合
+	mscA = &ca{2451554.084, 115.8774771, 6.4822, 114.2088742}  //水星上合
 
-	moA = &ca{2452097.382, 779.936104, 181.9573, 48.705244}
+	vicA = &ca{2451996.706, 583.921361, 82.7311, 215.513058}  //金星下合
+	vscA = &ca{2451704.746, 583.921361, 154.9745, 215.513058} //金星上合
 
-	joA = &ca{2451870.628, 398.884046, 318.4681, 33.140229}
+	moA = &ca{2452097.382, 779.936104, 181.9573, 48.705244} //火星冲
+	mcA = &ca{2451707.414, 779.936104, 157.6047, 48.705244} //火星合
 
-	soA = &ca{2451870.17, 378.091904, 318.0172, 12.647487}
-	scA = &ca{2451681.124, 378.091904, 131.6934, 12.647487}
-	uoA = &ca{2451764.317, 369.656035, 213.6884, 4.333093}
+	joA = &ca{2451870.628, 398.884046, 318.4681, 33.140229} //木星冲
+	jcA = &ca{2451671.186, 398.884046, 121.8980, 33.140229} //木星合
 
-	noA = &ca{2451753.122, 367.486703, 202.6544, 2.194998}
+	soA = &ca{2451870.17, 378.091904, 318.0172, 12.647487}  //土星冲
+	scA = &ca{2451681.124, 378.091904, 131.6934, 12.647487} //土星合
+
+	uoA = &ca{2451764.317, 369.656035, 213.6884, 4.333093} //天王星冲
+	ucA = &ca{2451579.489, 369.656035, 31.5219, 4.333093}  //天王星合
+
+	noA = &ca{2451753.122, 367.486703, 202.6544, 2.194998} //海王星冲
+	ncA = &ca{2451569.379, 367.486703, 21.5569, 2.194998}  //海王星合
 )
 
 // caa holds coefficients for "additional angles" for outer planets
 // as given on p. 251
+// 一些行星的额外参数的系数项
 type caa struct {
 	c, f float64
 }
@@ -215,6 +267,7 @@ var naa = []caa{
 // Table 33.B, p. 256
 
 // Mercury inferior conjunction
+// 水星下合周期项系数
 var micB = [][]float64{
 	{.0545, .0002},
 	{-6.2008, .0074, .00003},
@@ -230,6 +283,7 @@ var micB = [][]float64{
 }
 
 // Mercury superior conjunction
+// 水星上合周期项系数
 var mscB = [][]float64{
 	{-.0548, -.0002},
 	{7.3894, -.01, -.00003},
@@ -245,6 +299,7 @@ var mscB = [][]float64{
 }
 
 // Venus inferior conjunction
+// 金星下合周期项系数
 var vicB = [][]float64{
 	{-.0096, .0002, -.00001},
 	{2.0009, -.0033, -.00001},
@@ -255,7 +310,20 @@ var vicB = [][]float64{
 	{.0079, .0001},
 }
 
+// Venus superior conjunction
+// 金星上合周期项系数
+var vscB = [][]float64{
+	{.0099, -.0002, -.00001},
+	{4.1991, -.0121, -.00003},
+	{-.6095, .0102, -.00002},
+	{.25, -.0028, -.00003},
+	{.0063, .0025, -.00002},
+	{.0232, -.0005, -.00001},
+	{.0031, .0004},
+}
+
 // Mars opposition
+// 火星冲周期项系数
 var moB = [][]float64{
 	{-.3088, 0, .00002},
 	{-17.6965, .0363, .00005},
@@ -270,7 +338,24 @@ var moB = [][]float64{
 	{-.098, -.0011},
 }
 
+// Mars conjunction
+// 火星合周期项系数
+var mcB = [][]float64{
+	{.3102, -.0001, .00001},
+	{9.7273, -.0156, .00001},
+	{-18.3195, -.0467, .00009},
+	{-1.6488, -.0133, .00001},
+	{-2.6117, -.002, .00004},
+	{-.6827, -.0026, .00001},
+	{.0281, .0035, .00001},
+	{-.0823, .0006, .00001},
+	{.1584, .0013},
+	{.027, .0005},
+	{.0433},
+}
+
 // Jupiter opposition
+// 木星冲周期项系数
 var joB = [][]float64{
 	{-.1029, 0, -.00009},
 	{-1.9658, -.0056, .00007},
@@ -283,7 +368,22 @@ var joB = [][]float64{
 	{.3642, -.0019, -.00029},
 }
 
+// Jupiter conjunction
+// 木星合周期项系数
+var jcB = [][]float64{
+	{.1027, .0002, -.00009},
+	{-2.2637, .0163, -.00003},
+	{-6.154, -.021, .00008},
+	{-.2021, -.0017, .00001},
+	{.131, -.0008},
+	{.0086},
+	{.0087, .0002},
+	{0, .0144, -.00008},
+	{.3642, -.0019, -.00029},
+}
+
 // Saturn opposition
+// 土星冲周期项系数
 var soB = [][]float64{
 	{-.0209, .0006, .00023},
 	{4.5795, -.0312, -.00017},
@@ -303,6 +403,7 @@ var soB = [][]float64{
 }
 
 // Saturn conjunction
+// 土星合周期项系数
 var scB = [][]float64{
 	{.0172, -.0006, .00023},
 	{-8.5885, .0411, .00020},
@@ -322,6 +423,7 @@ var scB = [][]float64{
 }
 
 // Uranus opposition
+// 天王星冲周期项系数
 var uoB = [][]float64{
 	{.0844, -.0006},
 	{-.1048, .0246},
@@ -336,7 +438,24 @@ var uoB = [][]float64{
 	{.2153},
 }
 
+// Uranus conjunction
+// 天王星合周期项系数
+var ucB = [][]float64{
+	{-.0859, .0003},
+	{-3.8179, -.0148, .00003},
+	{5.1228, -.0105, -.00002},
+	{-.0803, .0011},
+	{-.1905, -.0006},
+	{.0088, .0001},
+	{0},
+	{0},
+	{.885},
+	{0},
+	{.2153},
+}
+
 // Neptune opposition {
+// 海王星冲周期项系数
 var noB = [][]float64{
 	{-.014, 0, .00001},
 	{-1.3486, .001, .00001},
@@ -349,9 +468,24 @@ var noB = [][]float64{
 	{.0728},
 }
 
+// Neptune conjunction {
+// 海王星合周期项系数
+var ncB = [][]float64{
+	{.0168},
+	{-2.5606, .0088, .00002},
+	{-.8611, -.0037, .00002},
+	{.0118, -.0004, .00001},
+	{.0037, -.0003},
+	{0},
+	{-.5964},
+	{0},
+	{.0728},
+}
+
 // Table 36.C, p. 259
 
 // Mercury east time correction
+// 水星最大东角距对平内合的时间修正的周期项系数
 var met = [][]float64{
 	{-21.6106, .0002},
 	{-1.9803, -.006, .00001},
@@ -367,6 +501,7 @@ var met = [][]float64{
 }
 
 // Mercury east elongation
+// 水星最大东角距的角度修正的周期项系数
 var mee = [][]float64{
 	{22.4697},
 	{-4.2666, .0054, .00002},
@@ -382,6 +517,7 @@ var mee = [][]float64{
 }
 
 // Mercury west time correction
+// 水星最大西角距对平内合的时间修正的周期项系数
 var mwt = [][]float64{
 	{21.6249, -.0002},
 	{.1306, .0065},
@@ -397,6 +533,7 @@ var mwt = [][]float64{
 }
 
 // Mercury west elongation
+// 水星最大西角距的角度修正的周期项系数
 var mwe = [][]float64{
 	{22.4143, -.0001},
 	{4.3651, -.0048, -.00002},
