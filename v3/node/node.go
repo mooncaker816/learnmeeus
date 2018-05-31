@@ -12,6 +12,7 @@ import (
 )
 
 // EllipticAscending computes time and distance of passage through the ascending node of a body in an elliptical orbit.
+// 根据轨道要素计算椭圆轨道升交点时间和距离
 //
 // Argument axis is semimajor axis in AU, ecc is eccentricity, argP is argument
 // of perihelion, timeP is time of perihelion as a jd.
@@ -22,6 +23,7 @@ func EllipticAscending(axis, ecc float64, argP unit.Angle, timeP float64) (jde, 
 }
 
 // EllipticDescending computes time and distance of passage through the descending node of a body in an elliptical orbit.
+// 根据轨道要素计算椭圆轨道降交点时间和距离
 //
 // Argument axis is semimajor axis in AU, ecc is eccentricity, argP is argument
 // of perihelion, timeP is time of perihelion as a jd.
@@ -42,6 +44,7 @@ func el(ν unit.Angle, axis, ecc, timeP float64) (jde, r float64) {
 }
 
 // ParabolicAscending computes time and distance of passage through the ascending node of a body in a parabolic orbit.
+// 根据轨道要素计算抛物线轨道升交点时间和距离
 //
 // Argument q is perihelion distance in AU, argP is argument of perihelion,
 // timeP is time of perihelion as a jd.
@@ -52,6 +55,7 @@ func ParabolicAscending(q float64, argP unit.Angle, timeP float64) (jde, r float
 }
 
 // ParabolicDescending computes time and distance of passage through the descending node of a body in a parabolic orbit.
+// 根据轨道要素计算抛物线轨道降交点时间和距离
 //
 // Argument q is perihelion distance in AU, argP is argument of perihelion,
 // timeP is time of perihelion as a jd.
