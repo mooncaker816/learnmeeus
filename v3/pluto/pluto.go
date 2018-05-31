@@ -14,6 +14,7 @@ import (
 )
 
 // Heliocentric returns J2000 heliocentric coordinates of Pluto.
+//  J2000冥王星日心黄道坐标
 //
 // Results l, b are solar longitude and latitude in radians.
 // Result r is distance in AU.
@@ -36,6 +37,7 @@ func Heliocentric(jde float64) (l, b unit.Angle, r float64) {
 }
 
 // Astrometric returns J2000 astrometric coordinates of Pluto.
+//  J2000冥王星地心赤道坐标
 func Astrometric(jde float64, e *pp.V87Planet) (α unit.RA, δ unit.Angle) {
 	const sε, cε = base.SOblJ2000, base.COblJ2000
 	f := func(jde float64) (x, y, z float64) {
