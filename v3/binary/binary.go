@@ -11,10 +11,11 @@ import (
 )
 
 // M computes mean anomaly for the given date.
+// 计算year时刻伴星的平近点角
 //
 //	year is a decimal year specifying the date
-//	T is time of periastron, as a decimal year
-//	P is period of revolution in mean solar years
+//	T is time of periastron, as a decimal year 经过近点的时刻，一般表达形式为带小数点的年
+//	P is period of revolution in mean solar years 旋转周期，单位是平太阳年
 func M(year, T, P float64) unit.Angle {
 	n := 2 * math.Pi / P
 	return unit.Angle(n * (year - T)).Mod1()
@@ -22,6 +23,7 @@ func M(year, T, P float64) unit.Angle {
 
 // Position computes apparent position angle and angular distance of
 // components of a binary star.
+// 计算某一时刻的视位置角θ和角距离ρ，需提前求得 M，再解开普勒方程的到 E
 //
 //	e is eccentricity of the true orbit
 //	a is angular apparent semimajor axis
@@ -45,6 +47,7 @@ func Position(e float64, a, i, Ω, ω, E unit.Angle) (θ, ρ unit.Angle) {
 
 // ApparentEccentricity returns apparent eccenticity of a binary star
 // given true orbital elements.
+// 视轨道离心率
 //
 //  e is eccentricity of the true orbit
 //  i is inclination relative to the line of sight
