@@ -25,6 +25,7 @@ func snap(y, q float64) float64 {
 }
 
 // MeanNew returns the jde of the mean New Moon nearest the given date.
+// 平新月
 //
 // Year is a decimal year specifying a date.
 //
@@ -34,6 +35,7 @@ func MeanNew(year float64) float64 {
 }
 
 // MeanFirst returns the jde of the mean First Quarter Moon nearest the given date.
+// 平半满上弦月
 //
 // Year is a decimal year specifying a date.
 //
@@ -43,6 +45,7 @@ func MeanFirst(year float64) float64 {
 }
 
 // MeanFull returns the jde of the mean Full Moon nearest the given date.
+// 平满月
 //
 // Year is a decimal year specifying a date.
 //
@@ -52,6 +55,7 @@ func MeanFull(year float64) float64 {
 }
 
 // MeanLast returns the jde of the mean Last Quarter Moon nearest the given date.
+// 平半满下弦月
 //
 // Year is a decimal year specifying a date.
 //
@@ -61,6 +65,7 @@ func MeanLast(year float64) float64 {
 }
 
 // New returns the jde of New Moon nearest the given date.
+// 新月
 //
 // Year is a decimal year specifying a date.
 func New(year float64) float64 {
@@ -69,6 +74,7 @@ func New(year float64) float64 {
 }
 
 // First returns the jde of First Quarter Moon nearest the given date.
+// 半满上弦月
 //
 // Year is a decimal year specifying a date.
 func First(year float64) float64 {
@@ -77,6 +83,7 @@ func First(year float64) float64 {
 }
 
 // Full returns the jde of Full Moon nearest the given date.
+// 满月
 //
 // Year is a decimal year specifying a date.
 func Full(year float64) float64 {
@@ -85,6 +92,7 @@ func Full(year float64) float64 {
 }
 
 // Last returns the jde of Last Quarter Moon nearest the given date.
+// 半满下弦月
 //
 // Year is a decimal year specifying a date.
 func Last(year float64) float64 {
@@ -101,8 +109,8 @@ type mp struct {
 const p = math.Pi / 180
 
 func newMp(y, q float64) *mp {
-	m := &mp{k: snap(y, q)}
-	m.T = m.k * ck // (49.3) p. 350
+	m := &mp{k: snap(y, q)} // 计算 k
+	m.T = m.k * ck          // (49.3) p. 350
 	m.E = base.Horner(m.T, 1, -.002516, -.0000074)
 	m.M = base.Horner(m.T, 2.5534*p, 29.1053567*p/ck,
 		-.0000014*p, -.00000011*p)
@@ -118,7 +126,7 @@ func newMp(y, q float64) *mp {
 	m.A[3] = 349.42*p + 36.412478*p*m.k
 	m.A[4] = 84.66*p + 18.206239*p*m.k
 	m.A[5] = 141.74*p + 53.303771*p*m.k
-	m.A[6] = 207.17*p + 2.453732*p*m.k
+	m.A[6] = 207.14*p + 2.453732*p*m.k
 	m.A[7] = 154.84*p + 7.30686*p*m.k
 	m.A[8] = 34.52*p + 27.261239*p*m.k
 	m.A[9] = 207.19*p + .121824*p*m.k
@@ -159,6 +167,7 @@ func (e *mp) nfc(c *[25]float64) float64 {
 }
 
 // new coefficients
+// 新月修正量系数
 var nc = [25]float64{
 	-.4072,
 	.17241,
@@ -188,6 +197,7 @@ var nc = [25]float64{
 }
 
 // full coefficients
+// 满月修正量系数
 var fc = [25]float64{
 	-.40614,
 	.17302,
@@ -217,6 +227,7 @@ var fc = [25]float64{
 }
 
 // first or last corrections
+// 半满上、下弦月修正
 func (m *mp) flc() float64 {
 	return -.62801*math.Sin(m.Mʹ) +
 		.17172*math.Sin(m.M)*m.E +
@@ -228,7 +239,7 @@ func (m *mp) flc() float64 {
 		-.0018*math.Sin(m.Mʹ-2*m.F) +
 		-.0007*math.Sin(m.Mʹ+2*m.F) +
 		-.0004*math.Sin(3*m.Mʹ) +
-		-.00034*math.Sin(2*m.Mʹ-m.M) +
+		-.00034*math.Sin(2*m.Mʹ-m.M)*m.E +
 		.00032*math.Sin(m.M+2*m.F)*m.E +
 		.00032*math.Sin(m.M-2*m.F)*m.E +
 		-.00028*math.Sin(m.Mʹ+2*m.M)*m.E*m.E +
@@ -245,12 +256,14 @@ func (m *mp) flc() float64 {
 		-.00002*math.Sin(3*m.Mʹ+m.M)
 }
 
+// 对弦月的额外修正
 func (m *mp) w() float64 {
 	return .00306 - .00038*m.E*math.Cos(m.M) + .00026*math.Cos(m.Mʹ) -
 		.00002*(math.Cos(m.Mʹ-m.M)-math.Cos(m.Mʹ+m.M)-math.Cos(2*m.F))
 }
 
 // additional corrections
+// 对所有月相的额外修正
 func (m *mp) a() float64 {
 	var a float64
 	for i, c := range ac {
@@ -259,6 +272,7 @@ func (m *mp) a() float64 {
 	return a
 }
 
+// 对所有月相的额外修正系数
 var ac = [14]float64{
 	.000325,
 	.000165,

@@ -27,6 +27,7 @@ func snap(y, h float64) float64 {
 }
 
 // MeanPerigee returns the jde of the mean perigee of the Moon nearest the given date.
+// 平近地点
 //
 // Year is a decimal year specifying a date.
 func MeanPerigee(year float64) float64 {
@@ -34,6 +35,7 @@ func MeanPerigee(year float64) float64 {
 }
 
 // Perigee returns the jde of perigee of the Moon nearest the given date.
+// 近地点
 //
 // Year is a decimal year specifying a date.
 func Perigee(year float64) float64 {
@@ -42,6 +44,7 @@ func Perigee(year float64) float64 {
 }
 
 // MeanApogee returns the jde of the mean apogee of the Moon nearest the given date.
+// 平远地点
 //
 // Year is a decimal year specifying a date.
 func MeanApogee(year float64) float64 {
@@ -49,6 +52,7 @@ func MeanApogee(year float64) float64 {
 }
 
 // Apogee returns the jde of apogee of the Moon nearest the given date.
+// 远地点
 //
 // Year is a decimal year specifying a date.
 func Apogee(year float64) float64 {
@@ -81,15 +85,16 @@ func newLa(y, h float64) *la {
 	l := &la{k: snap(y, h)}
 	l.T = l.k * ck // (50.3) p. 350
 	l.D = base.Horner(l.T, 171.9179*p, 335.9106046*p/ck,
-		-.0100383*p, -.00001156*p, .000000055*p)
+		-.0100383*p, -.00001156*p, .000000055*p) //月亮平距角
 	l.M = base.Horner(l.T, 347.3477*p, 27.1577721*p/ck,
-		-.000813*p, -.000001*p)
+		-.000813*p, -.000001*p) //太阳平近点角
 	l.F = base.Horner(l.T, 316.6109*p, 364.5287911*p/ck,
-		-.0125053*p, -.0000148*p)
+		-.0125053*p, -.0000148*p) //月亮纬度参数
 	return l
 }
 
 // perigee correction
+// 近地点修正
 func (l *la) pc() float64 {
 	return -1.6769*math.Sin(2*l.D) +
 		.4589*math.Sin(4*l.D) +
@@ -154,6 +159,7 @@ func (l *la) pc() float64 {
 }
 
 // apogee correction
+// 远地点修正
 func (l *la) ac() float64 {
 	return .4392*math.Sin(2*l.D) +
 		.0684*math.Sin(4*l.D) +
@@ -190,6 +196,7 @@ func (l *la) ac() float64 {
 }
 
 // apogee parallax
+// 远地点视差修正
 func (l *la) ap() unit.Angle {
 	return unit.AngleFromSec(
 		3245.251 +
@@ -213,6 +220,7 @@ func (l *la) ap() unit.Angle {
 }
 
 // perigee parallax
+// 近地点视差修正
 func (l *la) pp() unit.Angle {
 	return unit.AngleFromSec(
 		3629.215 +
