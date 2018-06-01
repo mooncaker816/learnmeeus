@@ -11,6 +11,7 @@ import (
 )
 
 // Ascending returns the date of passage of the Moon through an ascending node.
+// 升交点对应的力学时
 //
 // Argument year is a decimal year specifying a date near the event.
 //
@@ -20,6 +21,7 @@ func Ascending(year float64) float64 {
 }
 
 // Descending returns the date of passage of the Moon through a descending node.
+// 降交点对应的力学时
 //
 // Argument year is a decimal year specifying a date near the event.
 //
