@@ -16,6 +16,7 @@ import (
 var hp = unit.AngleFromSec(8.794)
 
 // Horizontal returns equatorial horizontal parallax of a body.
+// 赤道地平视差
 //
 // Argument Δ is distance in AU.
 //
