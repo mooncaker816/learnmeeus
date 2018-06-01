@@ -77,12 +77,12 @@ func g(k, jm, c1, c2 float64) (eclipse bool, jmax, γ, u, Mʹ float64) {
 // Eclipse type identifiers returned from Solar and Lunar.
 const (
 	None         = iota
-	Partial      // for solar eclipses
-	Annular      // solar
-	AnnularTotal // solar
-	Penumbral    // for lunar eclipses
-	Umbral       // lunar
-	Total        // solar or lunar
+	Partial      // for solar eclipses 日偏食
+	Annular      // solar 日环食
+	AnnularTotal // solar 日全环食
+	Penumbral    // for lunar eclipses 半影月食
+	Umbral       // lunar 本影月食
+	Total        // solar or lunar 全食
 )
 
 // Snap returns k at specified quarter q nearest year y.
@@ -94,6 +94,7 @@ func snap(y, q float64) float64 {
 }
 
 // Solar computes quantities related to solar eclipses.
+// 日食计算
 //
 // Argument year is a decimal year specifying a date.
 //
@@ -156,6 +157,7 @@ func Solar(year float64) (eclipseType int, central bool, jmax, γ, u, p, mag flo
 }
 
 // Lunar computes quantities related to lunar eclipses.
+// 月食计算
 //
 // Argument year is a decimal year specifying a date.
 //
@@ -185,8 +187,8 @@ func Lunar(year float64) (eclipseType int, jmax, γ, ρ, σ, mag float64, sdTota
 	if !e {
 		return // no eclipse
 	}
-	ρ = 1.2848 + u
-	σ = .7403 - u
+	ρ = 1.2848 + u //半影
+	σ = .7403 - u  //本影
 	aγ := math.Abs(γ)
 	mag = (1.0128 - u - aγ) / .545 // (54.3) p. 382
 	switch {
