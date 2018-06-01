@@ -12,6 +12,7 @@ import (
 )
 
 // Parallax returns equatorial horizontal parallax of the Moon.
+// 月球赤道地平视差
 //
 // Argument Δ is distance between centers of the Earth and Moon, in km.
 func Parallax(Δ float64) unit.Angle {
@@ -22,18 +23,19 @@ func Parallax(Δ float64) unit.Angle {
 const p = math.Pi / 180
 
 func dmf(T float64) (D, M, Mʹ, F float64) {
-	D = base.Horner(T, 297.8501921*p, 445267.1114034*p,
+	D = base.Horner(T, 297.8501921*p, 445267.1114034*p, //月日距角
 		-.0018819*p, p/545868, -p/113065000)
-	M = base.Horner(T, 357.5291092*p, 35999.0502909*p,
-		-.0001535*p, p/24490000)
-	Mʹ = base.Horner(T, 134.9633964*p, 477198.8675055*p,
+	M = base.Horner(T, 357.5291092*p, 35999.0502909*p, //太阳平近点角
+		-.0001536*p, p/24490000)
+	Mʹ = base.Horner(T, 134.9633964*p, 477198.8675055*p, //月亮平近点角
 		.0087414*p, p/69699, -p/14712000)
-	F = base.Horner(T, 93.272095*p, 483202.0175233*p,
+	F = base.Horner(T, 93.272095*p, 483202.0175233*p, //月球经度参数(到升交点的平角距离)
 		-.0036539*p, -p/3526000, p/863310000)
 	return
 }
 
 // Position returns geocentric location of the Moon.
+// 计算月球地心黄经，黄纬，地月距离
 //
 // Results are referenced to mean equinox of date and do not include
 // the effect of nutation.
@@ -44,7 +46,7 @@ func dmf(T float64) (D, M, Mʹ, F float64) {
 func Position(jde float64) (λ, β unit.Angle, Δ float64) {
 	T := base.J2000Century(jde)
 	Lʹ := base.Horner(T, 218.3164477*p, 481267.88123421*p,
-		-.0015786*p, p/538841, -p/65194000)
+		-.0015786*p, p/538841, -p/65194000) //月球平黄经
 	D, M, Mʹ, F := dmf(T)
 	A1 := 119.75*p + 131.849*p*T
 	A2 := 53.09*p + 479264.29*p*T
@@ -248,18 +250,21 @@ var tb = [...]tbs{
 }
 
 // Node returns longitude of the mean ascending node of the lunar orbit.
+//月球升交点(平)黄经
 func Node(jde float64) unit.Angle {
 	return unit.AngleFromDeg(base.Horner(base.J2000Century(jde),
 		125.0445479, -1934.1362891, .0020754, 1/467441, -1/60616000)).Mod1()
 }
 
 // Perigee returns longitude of perigee of the lunar orbit.
+//月球平近点角
 func Perigee(jde float64) unit.Angle {
 	return unit.AngleFromDeg(base.Horner(base.J2000Century(jde),
 		83.3532465, 4069.0137287, -.01032, -1/80053, 1/18999000)).Mod1()
 }
 
 // TrueNode returns longitude of the true ascending node.
+//月球升交点(真)黄经
 //
 // That is, the node of the instantaneous lunar orbit.
 func TrueNode(jde float64) unit.Angle {
