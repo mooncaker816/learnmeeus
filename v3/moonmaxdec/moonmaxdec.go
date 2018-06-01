@@ -12,6 +12,7 @@ import (
 )
 
 // North computes the maximum northern declination of the Moon near a given date.
+// 北纬最大纬度
 //
 // Argument year is a decimal year specifying a date near the event.
 //
@@ -22,6 +23,7 @@ func North(y float64) (jde float64, δ unit.Angle) {
 }
 
 // South computes the maximum southern declination of the Moon near a given date.
+// 南纬最大纬度
 //
 // Argument year is a decimal year specifying a date near the event.
 //
@@ -136,6 +138,7 @@ type mc struct {
 }
 
 // north coefficients
+// 北纬参数和系数
 var nc = mc{
 	D:   152.2029 * p,
 	M:   14.8591 * p,
@@ -231,6 +234,7 @@ var nc = mc{
 }
 
 // south coefficients
+// 南纬参数和系数
 var sc = mc{
 	D:   345.6676 * p,
 	M:   1.3951 * p,
