@@ -30,6 +30,7 @@ var (
 )
 
 // Semidiameter returns semidiameter at specified distance.
+// 天体视半径，s0为天体的半径
 //
 // Δ must be observer-body distance in AU.
 func Semidiameter(s0 unit.Angle, Δ float64) unit.Angle {
@@ -37,6 +38,7 @@ func Semidiameter(s0 unit.Angle, Δ float64) unit.Angle {
 }
 
 // SaturnApparentPolar returns apparent polar semidiameter of Saturn
+// 土星极视半径
 // at specified distance.
 //
 // Argument Δ must be observer-Saturn distance in AU.  Argument B is
@@ -50,6 +52,7 @@ func SaturnApparentPolar(Δ float64, B unit.Angle) unit.Angle {
 }
 
 // MoonTopocentric returns observed topocentric semidiameter of the Moon.
+// 在地面上(站心)看到的月亮视半径
 //
 //	Δ is distance to Moon in AU.
 //	δ is declination of Moon.
@@ -70,6 +73,7 @@ func MoonTopocentric(Δ float64, δ unit.Angle, H unit.HourAngle, ρsφʹ, ρcφ
 }
 
 // MoonTopocentric2 returns observed topocentric semidiameter of the Moon
+// 月亮的站心视半径（简单公式）
 // by a less rigorous method.
 //
 // Δ is distance to Moon in AU, h is altitude of the Moon above the observer's
