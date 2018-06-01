@@ -20,7 +20,7 @@ import (
 )
 
 // IAU value of inclination of mean lunar equator, p. 372
-var _I = unit.AngleFromDeg(1.54242)
+var _I = unit.AngleFromDeg(1.54242) //月亮赤道与黄道的夹角
 var sI, cI = math.Sincos(_I.Rad())
 
 // Physical returns quantities useful for physical observation of the Moon.
@@ -33,7 +33,7 @@ var sI, cI = math.Sincos(_I.Rad())
 //
 // Returned l0, b0 are the selenographic coordinates of the Sun.
 func Physical(jde float64, earth *pp.V87Planet) (l, b, P, l0, b0 unit.Angle) {
-	λ, β, Δ := moonposition.Position(jde) // (λ without nutation)
+	λ, β, Δ := moonposition.Position(jde) // (λ without nutation)月亮的地心视黄经,黄纬
 	m := newMoon(jde)
 	l, b = m.lib(λ, β)
 	P = m.pa(λ, β, b)
@@ -70,7 +70,7 @@ func newMoon(jde float64) *moon {
 	D := unit.AngleFromDeg(base.Horner(T,
 		297.8501921, 445267.1114034, -.0018819, 1/545868, -1/113065000)).Rad()
 	M := unit.AngleFromDeg(base.Horner(T,
-		357.5291092, 35999.0502909, -.0001535, 1/24490000)).Rad()
+		357.5291092, 35999.0502909, -.0001536, 1/24490000)).Rad()
 	Mʹ := unit.AngleFromDeg(base.Horner(T,
 		134.9633964, 477198.8675055, .0087414, 1/69699, -1/14712000)).Rad()
 	E := base.Horner(T, 1, -.002516, -.0000074)
@@ -156,6 +156,7 @@ func (m *moon) physical(A, bʹ unit.Angle) (lʺ, bʺ unit.Angle) {
 	return
 }
 
+// 计算月亮自转轴的位置角
 func (m *moon) pa(λ, β, b unit.Angle) unit.Angle {
 	V := m.Ω + m.Δψ + m.σ.Div(sI)
 	sV, cV := V.Sincos()
@@ -171,11 +172,13 @@ func (m *moon) pa(λ, β, b unit.Angle) unit.Angle {
 	return P
 }
 
+//太阳的月心月面坐标
 func (m *moon) sun(λ, β unit.Angle, Δ float64, earth *pp.V87Planet) (l0, b0 unit.Angle) {
 	λ0, _, R := solar.ApparentVSOP87(earth, m.jde)
-	ΔR := unit.Angle(Δ / (R * base.AU))
-	λH := λ0 + math.Pi + ΔR.Mul(β.Cos()*(λ0-λ).Sin())
-	βH := ΔR * β
+	ΔR := Δ / (R * base.AU)
+	λH := λ0 + math.Pi + unit.AngleFromDeg(57.296).Mul(ΔR*(β.Cos()*(λ0-λ).Sin()))
+	// λH := λ0 + math.Pi + ΔR.Mul(β.Cos()*(λ0-λ).Sin())
+	βH := β.Mul(ΔR)
 	return m.lib(λH, βH)
 }
 
@@ -209,6 +212,7 @@ func TopocentricCorrections(jde, b, P, φ, δ, H, π float64) (Δl, Δb, ΔP flo
 */
 
 // SunAltitude returns altitude of the Sun above the lunar horizon.
+// 太阳月面地平高度角，η, θ为月心经纬，l0,b0是太阳在月面上的直射点的月心经纬
 //
 // Arguments η, θ are selenographic longitude and latitude of a site on the
 // Moon, l0, b0 are selenographic coordinates of the Sun, as returned by
@@ -221,6 +225,7 @@ func SunAltitude(η, θ, l0, b0 unit.Angle) unit.Angle {
 }
 
 // Sunrise returns time of sunrise for a point on the Moon near the given date.
+// 太阳升起的时间
 //
 // Arguments η, θ are selenographic longitude and latitude of a site on the
 // Moon, jde can be any date.
@@ -232,6 +237,7 @@ func Sunrise(η, θ unit.Angle, jde float64, earth *pp.V87Planet) float64 {
 }
 
 // Sunset returns time of sunset for a point on the Moon near the given date.
+// 太阳降落的时间
 //
 // Arguments η, θ are selenographic longitude and latitude of a site on the
 // Moon, jde can be any date.
@@ -242,6 +248,7 @@ func Sunset(η, θ unit.Angle, jde float64, earth *pp.V87Planet) float64 {
 	return jde + srCorr(η, θ, jde, earth)
 }
 
+// 太阳升起降落时间的修正量
 func srCorr(η, θ unit.Angle, jde float64, earth *pp.V87Planet) float64 {
 	_, _, _, l0, b0 := Physical(jde, earth)
 	h := SunAltitude(η, θ, l0, b0)
